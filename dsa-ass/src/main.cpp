@@ -1,4 +1,5 @@
-#include "init.h"
+#include "../include/Init.h"
+#include "../include/Models/Administrator.h"
 
 #include <iostream>
 #include <Windows.h>
@@ -17,4 +18,7 @@ int main() {
 		actors.get(i)->print();
 		std::cout << std::endl;
 	}
+
+	Administrator admin;
+	admin.addMovie(movies);
 }

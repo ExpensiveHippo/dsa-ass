@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.h"
+#include "../../include/DataStructures/Vector.h"
 
 #include <stdexcept>
 

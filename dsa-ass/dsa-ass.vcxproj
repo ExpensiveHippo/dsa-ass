@@ -19,22 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="init.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Movie.cpp" />
-    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="src\Models\Actor.cpp" />
+    <ClCompile Include="src\Models\Administrator.cpp" />
+    <ClCompile Include="src\Init.cpp" />
+    <ClCompile Include="src\Utils\IOUtils.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Models\Movie.cpp" />
+    <ClCompile Include="src\Utils\StringUtils.cpp" />
+    <ClCompile Include="src\DataStructures\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="init.h" />
-    <ClInclude Include="Movie.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="include\Models\Actor.h" />
+    <ClInclude Include="include\Models\Administrator.h" />
+    <ClInclude Include="include\Init.h" />
+    <ClInclude Include="include\Utils\IOUtils.h" />
+    <ClInclude Include="include\Models\Movie.h" />
+    <ClInclude Include="include\Utils\StringUtils.h" />
+    <ClInclude Include="include\DataStructures\Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="actors.csv" />
-    <None Include="cast.csv" />
-    <None Include="movies.csv">
+    <None Include="resource\actors.csv" />
+    <None Include="resource\cast.csv" />
+    <None Include="resource\movies.csv">
       <DeploymentContent>false</DeploymentContent>
     </None>
   </ItemGroup>
