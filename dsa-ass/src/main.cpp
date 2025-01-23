@@ -1,5 +1,6 @@
 #include "../include/Init.h"
 #include "../include/Models/Administrator.h"
+#include "../include/DataStructures/HashMap.h"
 
 #include <iostream>
 #include <Windows.h>
@@ -9,16 +10,21 @@ int main() {
 	Vector<Movie*> movies = initMovies();
 	Vector<Actor*> actors = initActors();
 
+	HashMap<Movie*> hMovies;
+	HashMap<Actor*> hActors;
+	Administrator admin(hActors, hMovies);
+
 	for (int i = 0; i < movies.length(); i++) {
-		movies.get(i)->print();
-		std::cout << std::endl;
+		Movie* m = movies.get(i);
+		hMovies.add(m->getName(), m);
 	}
 
 	for (int i = 0; i < actors.length(); i++) {
-		actors.get(i)->print();
-		std::cout << std::endl;
+		Actor* a = actors.get(i);
+		hActors.add(a->getName(), a);
 	}
-
-	Administrator admin;
-	admin.addMovie(movies);
+	
+	admin.addActorToMovie("Emma Watson", "Rain Man");
+	admin.updateActor("Emma Watson");
+	admin.updateMovie("Rain Man");
 }
