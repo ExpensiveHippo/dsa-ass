@@ -11,7 +11,7 @@ Administrator::Administrator(HashMap<Actor*>& actors, HashMap<Movie*>& movies)
 	: actors(actors), 
 	movies(movies) {}
 
-void Administrator::addActor(std::string actorName) {
+void Administrator::addActor() {
 	// Generate id or ask user for id?
 	int birthYear;
 	int id;
@@ -50,7 +50,7 @@ void Administrator::addActor(std::string actorName) {
 	} while (true);
 }
 
-void Administrator::addMovie(std::string movieName) {
+void Administrator::addMovie() {
 	int year;
 	int id;
 	std::string name, plot;
