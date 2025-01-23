@@ -31,7 +31,7 @@ std::string replace(std::string s, std::string oldStr, std::string newStr) {
 	return s;
 }
 
-bool isValidUint16(const std::string& s) {
+bool isValidUInt(const std::string& s) {
 	
 	// returns false if empty or negative
 	if (s.empty() || s[0] == '-') {
@@ -51,38 +51,7 @@ bool isValidUint16(const std::string& s) {
 		}
 
 		// check if in bounds
-		if (result > std::numeric_limits<uint16_t>::max()) {
-			return false;
-		}
-
-		return true;
-	}
-	catch (const std::exception&) {
-		return false;
-	}
-}
-
-bool isValidUint32(const std::string& s) {
-	
-	// returns false if empty or negative
-	if (s.empty() || s[0] == '-') {
-		return false;
-	}
-
-	try {
-
-		// store number of characters processed
-		size_t pos; 
-
-		unsigned long result = std::stoul(s, &pos);
-
-		// return false if the conversion was not completed for the entire string
-		if (pos != s.length()) {
-			return false;
-		}
-
-		// check if in bounds
-		if (result > std::numeric_limits<uint32_t>::max()) {
+		if (result > std::numeric_limits<int>::max()) {
 			return false;
 		}
 

@@ -14,10 +14,10 @@ Vector<Movie*> initMovies() {
 	while (std::getline(file, line)) {
 		Vector<std::string> data = split(line, ",");
 		Movie* m = new Movie(
-			std::stoul(data.get(0)),
+			std::stoi(data.get(0)),
 			replace(data.get(1), ";", ","),
 			replace(data.get(2), ";", ","),
-			std::stoul(data.get(3))
+			std::stoi(data.get(3))
 		);
 		movies.push(m);
 	}
@@ -36,9 +36,9 @@ Vector<Actor*> initActors() {
 	while (std::getline(file, line)) {
 		Vector<std::string> data = split(line, ",");
 		Actor* a = new Actor(
-			std::stoul(data.get(0)),
+			std::stoi(data.get(0)),
 			replace(data.get(1), "\"", ""),
-			std::stoul(data.get(2))
+			std::stoi(data.get(2))
 		);
 		actors.push(a);
 	}

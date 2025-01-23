@@ -6,12 +6,17 @@
 class Actor
 {
 private:
-	uint32_t id;
+	int id;
 	std::string name;
-	uint16_t birthYear;
+	int birthYear;
 public:
 	Actor();
-	Actor(uint32_t id, std::string name, uint16_t birthYear);
+	Actor(int id, std::string name, int birthYear);
+	int getId();
+	void setName(std::string name);
+	std::string getName();
+	void setBirthYear(int birthYear);
+	int getBirthYear();
 	void print();
 };
 
