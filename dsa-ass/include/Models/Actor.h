@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include <cstdint>
 #include <string>
 
@@ -23,5 +23,8 @@ public:
 	float getRating();
 	int getTotalRatingCount();
 	void print();
+	uint16_t getBirthYear() const;	//getter for comparing age in User.cpp
+	bool operator>(const Actor& other) const;	//for comparing age in AVLTree.cpp
+	bool operator<(const Actor& other) const;
 };
 

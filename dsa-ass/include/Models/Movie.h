@@ -33,5 +33,9 @@ public:
 	float getRating();
 	int getTotalRatingCount();
 	void print();
+	uint16_t getReleaseYear();
+	bool operator<(const Movie& other) const;
+	bool operator>(const Movie& other) const;
+
 };
 

@@ -65,3 +65,13 @@ void Actor::print() {
 		<< "\nBirth Year: " << birthYear
 		<< std::endl;
 }
+uint16_t Actor::getBirthYear() const {
+	return birthYear;
+}
+bool Actor::operator>(const Actor& other) const {
+	return this->birthYear < other.birthYear;	//reversed such that actors displayed in ascending order
+}
+
+bool Actor::operator<(const Actor& other) const {
+	return this->birthYear > other.birthYear;
+}
