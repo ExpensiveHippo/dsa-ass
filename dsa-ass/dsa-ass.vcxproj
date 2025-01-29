@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DataStructures\AVLTree.cpp" />
+    <ClCompile Include="src\Models\User.cpp" />
     <ClCompile Include="src\Models\Actor.cpp" />
     <ClCompile Include="src\Models\Administrator.cpp" />
     <ClCompile Include="src\Init.cpp" />
@@ -29,9 +31,11 @@
     <ClCompile Include="src\DataStructures\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\DataStructures\AVLTree.h" />
     <ClInclude Include="include\Models\Actor.h" />
     <ClInclude Include="include\Models\Administrator.h" />
     <ClInclude Include="include\Init.h" />
+    <ClInclude Include="include\Models\User.h" />
     <ClInclude Include="include\Utils\IOUtils.h" />
     <ClInclude Include="include\Models\Movie.h" />
     <ClInclude Include="include\Utils\StringUtils.h" />

@@ -1,6 +1,6 @@
 #include "../include/Init.h"
 #include "../include/Models/Administrator.h"
-
+#include "../include/Models/User.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -20,5 +20,8 @@ int main() {
 	}
 
 	Administrator admin;
+	User user;
 	admin.addMovie(movies);
+	user.displayActorsByAge(actors);
+	user.displayRecentMovies(movies);
 }

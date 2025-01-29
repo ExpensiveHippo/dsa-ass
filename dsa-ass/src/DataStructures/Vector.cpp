@@ -47,7 +47,7 @@ template<class T> void Vector<T>::push(T item) {
 	arr[currentCapacity++] = item;
 }
 
-template<class T> T Vector<T>::get(size_t pos) {
+template<class T> T& Vector<T>::get(size_t pos) {
 	if (pos >= currentCapacity) 
 	{
 		throw std::out_of_range("Index out of bounds");
