@@ -25,19 +25,10 @@ Vector<std::string> split(std::string s, std::string delimiter);
 std::string replace(std::string s, std::string oldStr, std::string newStr);
 
 /*
-@brief Check if string can be converted to uint16_t
+@brief Check if string can be converted to int 
 
 @param s - The string to check
 
 @return bool - True if the string can be converted to uint16_t, false otherwise
 */
-bool isValidUint16(const std::string& s);
-
-/*
-@brief Check if string can be converted to uint32_t
-
-@param s - The string to check
-
-@return bool - True if the string can be converted to uint32_t, false otherwise
-*/
-bool isValidUint32(const std::string& s);
+bool isValidUInt(const std::string& s);

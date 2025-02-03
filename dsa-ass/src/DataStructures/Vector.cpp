@@ -38,7 +38,7 @@ template<class T> void Vector<T>::push(T item) {
 	// if current array is full, double the size of the array
 	if (currentCapacity == maxCapacity) {
 		T* temp = new T[2 * maxCapacity];
-		for (size_t i = 0; i < maxCapacity; i++) {
+		for (int i = 0; i < maxCapacity; i++) {
 			temp[i] = arr[i];
 		}
 		maxCapacity *= 2;
@@ -56,7 +56,18 @@ template<class T> T& Vector<T>::get(size_t pos) {
 	return arr[pos];
 }
 
-template<class T> size_t Vector<T>::length() {
+template<class T> 
+bool Vector<T>::contains(T item) {
+	for (int i = 0; i < currentCapacity; i++) {
+		if (arr[i] == item) {
+			return true;
+		}
+	}
+	return false;
+}
+
+template<class T> 
+size_t Vector<T>::length() {
 	return currentCapacity;
 }
 

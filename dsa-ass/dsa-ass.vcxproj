@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DataStructures\HashMap.cpp" />
     <ClCompile Include="src\DataStructures\AVLTree.cpp" />
     <ClCompile Include="src\Models\User.cpp" />
     <ClCompile Include="src\Models\Actor.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\DataStructures\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\DataStructures\HashMap.h" />
     <ClInclude Include="include\DataStructures\AVLTree.h" />
     <ClInclude Include="include\Models\Actor.h" />
     <ClInclude Include="include\Models\Administrator.h" />

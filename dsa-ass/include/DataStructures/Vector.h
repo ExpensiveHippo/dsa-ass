@@ -34,6 +34,9 @@ public:
 	// gets item at index specified
 	T& get(size_t pos);
 
+	// checks if an item exists
+	bool contains(T item);
+
 	// returns the number of elements in the vector
 	size_t length();
 };

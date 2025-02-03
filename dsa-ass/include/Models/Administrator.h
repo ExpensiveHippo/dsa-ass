@@ -2,27 +2,30 @@
 
 #include "Actor.h" 
 #include "Movie.h"
-#include "../DataStructures/Vector.h"
+#include "../DataStructures/HashMap.h"
 
 class Administrator
 {
+private:
+	HashMap<Actor*>& actors;
+	HashMap<Movie*>& movies;
 public: 
 	// default constructor
-	Administrator();
+	Administrator(HashMap<Actor*>& actors, HashMap<Movie*>& movies);
 
 	// add new actor
-	void addActor(Vector<Actor*>& v);
+	void addActor();
 
 	// add new movie
-	void addMovie(Vector<Movie*>& m);
+	void addMovie();
 
 	// add an actor to a movie
-	void addActorToMovie();
+	void addActorToMovie(std::string actorName, std::string movieName);
 
 	// update actor details
-	void updateActor();
+	void updateActor(std::string actorName);
 
 	// update movie details
-	void updateMovie();
+	void updateMovie(std::string movieName);
 };
 
