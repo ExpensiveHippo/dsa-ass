@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include <cstdint>
 #include <string>
 
@@ -18,5 +18,8 @@ public:
 	void setBirthYear(int birthYear);
 	int getBirthYear();
 	void print();
+	uint16_t getBirthYear() const;	//getter for comparing age in User.cpp
+	bool operator>(const Actor& other) const;	//for comparing age in AVLTree.cpp
+	bool operator<(const Actor& other) const;
 };
 

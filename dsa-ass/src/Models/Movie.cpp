@@ -62,3 +62,13 @@ void Movie::print() {
 		<< "\nActors: " << strActors
 		<< std::endl;
 }
+uint16_t Movie::getReleaseYear() {
+	return year;
+}
+bool Movie::operator<(const Movie& other) const {
+	return this->year < other.year;
+}
+
+bool Movie::operator>(const Movie& other) const {
+	return this->year > other.year;
+}

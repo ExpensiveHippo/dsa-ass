@@ -1,7 +1,7 @@
 #include "../include/Init.h"
 #include "../include/Models/Administrator.h"
+#include "../include/Models/User.h"
 #include "../include/DataStructures/HashMap.h"
-
 #include <iostream>
 #include <Windows.h>
 
@@ -23,8 +23,15 @@ int main() {
 		Actor* a = actors.get(i);
 		hActors.add(a->getName(), a);
 	}
-	
+  
+  Administrator admin;
+	User user;
+
 	admin.addActorToMovie("Emma Watson", "Rain Man");
 	admin.updateActor("Emma Watson");
 	admin.updateMovie("Rain Man");
+
+	admin.addMovie(movies);
+	user.displayActorsByAge(actors);
+	user.displayRecentMovies(movies);
 }

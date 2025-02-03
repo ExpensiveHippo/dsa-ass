@@ -2,7 +2,6 @@
 
 #include "../DataStructures/Vector.h"
 #include "Actor.h"
-
 #include <string>
 #include <cstdint>
 
@@ -27,5 +26,9 @@ public:
 	int getYear();
 	void addActor(Actor* actor);
 	void print();
+	uint16_t getReleaseYear();
+	bool operator<(const Movie& other) const;
+	bool operator>(const Movie& other) const;
+
 };
 

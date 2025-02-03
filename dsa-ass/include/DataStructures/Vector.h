@@ -32,7 +32,7 @@ public:
 	void push(T item);
 
 	// gets item at index specified
-	T get(size_t pos);
+	T& get(size_t pos);
 
 	// checks if an item exists
 	bool contains(T item);
