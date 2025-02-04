@@ -12,6 +12,10 @@ Movie::Movie(int id, std::string name, std::string plot, int year)
 	actors(Vector<Actor*>())
 { }
 
+int Movie::getId() {
+	return id;
+}
+
 void Movie::setName(std::string newName) {
 	name = newName;
 }

@@ -34,7 +34,7 @@ void HashMap<V>::resize() {
 			buckets[i] = std::move(n->next);
 
 			size_t index = hash(n->key);
-			std::cout << "[RESIZING]: " << index << std::endl;
+			// std::cout << "[RESIZING]: " << index << std::endl;
 
 			n->next = std::move(newBuckets[index]);
 			newBuckets[index] = std::move(n);
@@ -67,6 +67,7 @@ bool HashMap<V>::hasKey(K key) {
 template<class V>
 void HashMap<V>::add(K key, V value) {
 	if (hasKey(key)) {
+		std::cout << "[DUPLICATE KEY] " << key << std::endl;
 		throw std::invalid_argument("Key already exists");
 	}
 
@@ -75,7 +76,7 @@ void HashMap<V>::add(K key, V value) {
 	}
 
 	size_t index = hash(key);
-	std::cout << "[ADDING]: " << index << std::endl;
+	// std::cout << "[ADDING]: " << index << std::endl;
 	std::unique_ptr<Node> temp = std::make_unique<Node>(key, value);
 
 	temp->next = std::move(buckets[index]);
@@ -102,7 +103,7 @@ void HashMap<V>::update(K key, V value) {
 }
 
 template<class V>
-V HashMap<V>::get(K key) {
+V& HashMap<V>::get(K key) {
 	size_t index = hash(key);
 	Node* current = buckets[index].get();
 

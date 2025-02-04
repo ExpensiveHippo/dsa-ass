@@ -28,6 +28,12 @@ public:
 	// move operator
 	Vector& operator=(Vector&& other) noexcept;
 
+	// copy constructor
+	Vector(const Vector& other) noexcept;
+
+	// copy operator
+	Vector& operator=(const Vector& other) noexcept;
+
 	// appends an item to the back of the vector
 	void push(T item);
 
