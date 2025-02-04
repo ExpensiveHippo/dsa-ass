@@ -7,105 +7,134 @@
 #include <cstdint>
 #include <limits>
 
-Administrator::Administrator(HashMap<Actor*>& actors, HashMap<Movie*>& movies) 
+Administrator::Administrator(HashMap<Vector<Actor*>>& actors, HashMap<Vector<Movie*>>& movies) 
 	: actors(actors), 
 	movies(movies) {}
 
-void Administrator::addActor() {
-	// Generate id or ask user for id?
-	int birthYear;
-	int id;
-	std::string name;
-	bool validInput;
+Actor* Administrator::chooseActor(Vector<Actor*>& aVec) {
+	if (aVec.length() == 0) {
+		throw std::invalid_argument("Error choosing actor: Vector is empty");
+	}
 
+	if (aVec.length() == 1) {
+		return aVec.get(0);
+	}
 
-	std::cout << "--------ADDING ACTOR---------\n";
+	int len = aVec.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		aVec.get(i)->print();
+	}
+
 	do {
-		// get actor id
-		validInput = getValidatedUInt("ID (or \":q\" to quit): ", id);
-		if (!validInput) {
-			return;
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
 		}
-
-		// get actor name
-		validInput = getValidatedString("Name (or \":q\" to quit): ", name, true);
-		if (!validInput) {
-			return;
+		else {
+			return aVec.get(choice - 1);
 		}
-
-		// get actor birth year
-		validInput = getValidatedUInt("Birth Year (or \":q\" to quit): ", birthYear, true);
-		if (!validInput) {
-			return;
-		}	
-
-		// create actor and add to vector
-		Actor* a = new Actor(id, name, birthYear);
-		actors.add(a->getName(), a);
-
-		// show success message and new actor details
-		std::cout << "\nActor added successfully!\n" << std::endl;
-		a->print();
-		std::cout << "\n\n";
 	} while (true);
 }
 
-void Administrator::addMovie() {
-	int year;
-	int id;
-	std::string name, plot;
-	bool validInput;
+Movie* Administrator::chooseMovie(Vector<Movie*>& mVec) {
+	if (mVec.length() == 0) {
+		throw std::invalid_argument("Error choosing movie: Vector is empty");
+	}
 
-	std::cout << "--------ADDING MOVIE---------\n";
+	if (mVec.length() == 1) {
+		return mVec.get(0);
+	}
+
+	int len = mVec.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		mVec.get(i)->print();
+	}
 
 	do {
-		// get movie id
-		validInput = getValidatedUInt("ID (or \":q\" to quit): ", id);
-		if (!validInput) {
-			return;
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
 		}
-
-		// get movie name
-		validInput = getValidatedString("Name (or \":q\" to quit): ", name, true);
-		if (!validInput) {
-			return;
+		else {
+			return mVec.get(choice - 1);
 		}
-
-		// get movie plot
-		validInput = getValidatedString("Plot (or \":q\" to quit): ", plot, true);
-		if (!validInput) {
-			return;
-		}
-
-		// get movie year
-		validInput = getValidatedUInt("Year (or \":q\" to quit): ", year, true);
-		if (!validInput) {
-			return;
-		}
-
-		// create movie and add to vector
-		Movie* m = new Movie(id, name, plot, year);
-		movies.add(m->getName(), m);
-
-		// show success message and new movie details
-		std::cout << "\nMovie added successfully!\n" << std::endl;
-		m->print();
-		std::cout << "\n\n";
 	} while (true);
+
+}
+
+void Administrator::addActor(Actor* a) {
+	if (actors.hasKey(a->getName())) {
+		Vector<Actor*>& aVec = actors.get(a->getName());
+		for (int i = 0; i < aVec.length(); i++) {
+			if (aVec.get(i)->getId() == a->getId()) {
+				std::cout << "[ERROR] There is already an actor with id: " << a->getId();
+				return;
+			}
+		}
+		aVec.push(a);
+	}
+	else {
+		Vector<Actor*> aVec;
+		aVec.push(a);
+		actors.add(a->getName(), aVec);
+	}
+}
+
+void Administrator::addMovie(Movie* m) {
+	if (movies.hasKey(m->getName())) {
+		Vector<Movie*>& mVec = movies.get(m->getName());
+		for (int i = 0; i < mVec.length(); i++) {
+			if (mVec.get(i)->getId() == m->getId()) {
+				std::cout << "[ERROR] There is already a movie with id: " << m->getId();
+				return;
+			}
+		}
+		mVec.push(m);
+	}
+	else {
+		Vector<Movie*> mVec;
+		mVec.push(m);
+		movies.add(m->getName(), mVec);
+	}
 }
 
 void Administrator::addActorToMovie(std::string actorName, std::string movieName) {
 	if (!actors.hasKey(actorName)) {
 		std::cout << "[ERROR]: Actor \"" << actorName << "\" not found";
+		return;
 	}
 
 	if (!movies.hasKey(movieName)) {
 		std::cout << "[ERROR]: Movie \"" << movieName << "\" not found";
+		return;
 	}
 
-	Actor* a = actors.get(actorName);
-	Movie* m = movies.get(movieName);
+	Vector<Actor*> aVec = actors.get(actorName);
+	Vector<Movie*> mVec = movies.get(movieName);
+	Actor* a = chooseActor(aVec);
+	Movie* m = chooseMovie(mVec);
+
 	m->addActor(a);
+	std::cout << "[RESULT]" << std::endl;
+	m->print();
+	auto temp = movies.get("Shri Rama Raksha");
+	for (int i = 0; i < temp.length(); i++) {
+		temp.get(i)->print();
+	}
 }
 
 void Administrator::updateActor(std::string actorName) {
@@ -115,8 +144,8 @@ void Administrator::updateActor(std::string actorName) {
 
 	std::string newName;
 	std::string newBirthYear;
-	Actor* a = actors.get(actorName);
-	
+	Vector<Actor*> aVec = actors.get(actorName);
+	Actor* a = chooseActor(aVec);
 	std::cout << "[UPDATING ACTOR DETAILS]" << std::endl;
 
 	// doesn't make sense to change id
@@ -133,7 +162,7 @@ void Administrator::updateActor(std::string actorName) {
 		std::getline(std::cin, newBirthYear);
 		if (newBirthYear.empty() || isValidUInt(newBirthYear)) {
 			break;
-		} 
+		}
 	}
 
 	std::cout << "[RESULT]" << std::endl;
@@ -163,8 +192,8 @@ void Administrator::updateMovie(std::string movieName) {
 	std::string newName;
 	std::string newPlot;
 	std::string newYear;
-	Movie* m = movies.get(movieName);
-	
+	Vector<Movie*> mVec = movies.get(movieName);
+	Movie* m = chooseMovie(mVec);
 	std::cout << "[UPDATING MOVIE DETAILS]" << std::endl;
 
 	// doesn't make sense to change id
@@ -186,11 +215,13 @@ void Administrator::updateMovie(std::string movieName) {
 		std::getline(std::cin, newYear);
 		if (newYear.empty() || isValidUInt(newYear)) {
 			break;
-		} 
+		}
 	}
 
+
+	// print updated results
 	std::cout << "[RESULT]" << std::endl;
-	if (newName.empty() 
+	if (newName.empty()
 		&& newPlot.empty()
 		&& newYear.empty()) {
 		std::cout << "No changes made" << std::endl;

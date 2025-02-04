@@ -21,7 +21,7 @@ public:
 	void update(K key, V value);
 
 	// get value given key
-	V get(K key);
+	V& get(K key);
 
 	// print
 	void print();
