@@ -4,16 +4,19 @@
 
 #include <stdexcept>
 
-template<class T> Vector<T>::Vector()
+template<class T> 
+Vector<T>::Vector()
 	: arr(new T[1])
 	, maxCapacity(1)
 	, currentCapacity(0) { }
 
-template<class T> Vector<T>::~Vector() {
+template<class T>
+Vector<T>::~Vector() {
 	arr = nullptr;
 }
 
-template<class T> Vector<T>::Vector(Vector&& other) noexcept 
+template<class T> 
+Vector<T>::Vector(Vector&& other) noexcept 
 	: arr(std::move(other.arr))
 	, maxCapacity(other.maxCapacity)
 	, currentCapacity(other.currentCapacity) 
@@ -22,7 +25,9 @@ template<class T> Vector<T>::Vector(Vector&& other) noexcept
 	other.currentCapacity = 0;
 }
 
-template<class T> Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
+template<class T>
+Vector<T>& Vector<T>::operator=(Vector&& other) noexcept 
+{
 	if (this != &other) {
 		arr = std::move(other.arr);
 		maxCapacity = other.maxCapacity;
@@ -34,7 +39,33 @@ template<class T> Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
 	return *this;
 }
 
-template<class T> void Vector<T>::push(T item) {
+template<class T> 
+Vector<T>::Vector(const Vector& other) noexcept
+	: arr(std::make_unique<T[]>(other.maxCapacity)),
+	currentCapacity(other.currentCapacity),
+	maxCapacity(other.maxCapacity)
+{
+	for (size_t i = 0; i < other.currentCapacity; i++) {
+		arr[i] = other.arr[i];
+	}
+}
+
+template<class T>
+Vector<T>& Vector<T>::operator=(const Vector& other) noexcept {
+	if (this != &other) {
+		arr = std::make_unique<T[]>(other.maxCapacity);
+		currentCapacity = other.currentCapacity;
+		maxCapacity = other.maxCapacity;
+
+		for (size_t i = 0; i < other.currentCapacity; i++) {
+			arr[i] = other.arr[i];
+		}
+	}
+	return *this;
+}
+
+template<class T> 
+void Vector<T>::push(T item) {
 	// if current array is full, double the size of the array
 	if (currentCapacity == maxCapacity) {
 		T* temp = new T[2 * maxCapacity];
@@ -47,7 +78,8 @@ template<class T> void Vector<T>::push(T item) {
 	arr[currentCapacity++] = item;
 }
 
-template<class T> T Vector<T>::get(size_t pos) {
+template<class T>
+T Vector<T>::get(size_t pos) {
 	if (pos >= currentCapacity) 
 	{
 		throw std::out_of_range("Index out of bounds");

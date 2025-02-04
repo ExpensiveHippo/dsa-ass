@@ -19,6 +19,7 @@ public:
 	// default constructor 
 	Movie();
 	Movie(int id, std::string name, std::string plot, int year);
+	int getId();
 	void setName(std::string newName);
 	std::string getName();
 	void setPlot(std::string newPlot);

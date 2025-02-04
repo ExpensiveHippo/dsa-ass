@@ -1,4 +1,5 @@
 #include "../include/Init.h"
+#include "../include/Utils/IOUtils.h"
 #include "../include/Models/Administrator.h"
 #include "../include/DataStructures/HashMap.h"
 
@@ -10,21 +11,104 @@ int main() {
 	Vector<Movie*> movies = initMovies();
 	Vector<Actor*> actors = initActors();
 
-	HashMap<Movie*> hMovies;
-	HashMap<Actor*> hActors;
+	HashMap<Vector<Movie*>> hMovies;
+	HashMap<Vector<Actor*>> hActors;
 	Administrator admin(hActors, hMovies);
 
 	for (int i = 0; i < movies.length(); i++) {
 		Movie* m = movies.get(i);
-		hMovies.add(m->getName(), m);
+		admin.addMovie(m);
 	}
 
 	for (int i = 0; i < actors.length(); i++) {
 		Actor* a = actors.get(i);
-		hActors.add(a->getName(), a);
+		admin.addActor(a);
 	}
 	
-	admin.addActorToMovie("Emma Watson", "Rain Man");
-	admin.updateActor("Emma Watson");
-	admin.updateMovie("Rain Man");
+	admin.addActorToMovie("Tom Jansen", "My Grandfather and the Man in the Moon");
+	
+}
+
+void addMovie(Administrator& admin) {
+	int year;
+	int id;
+	std::string name, plot;
+	bool validInput;
+
+	std::cout << "--------ADDING MOVIE---------\n";
+
+	do {
+		// get movie id
+		validInput = getValidatedUInt("ID (or \":q\" to quit): ", id);
+		if (!validInput) {
+			return;
+		}
+
+		// get movie name
+		validInput = getValidatedString("Name (or \":q\" to quit): ", name, true);
+		if (!validInput) {
+			return;
+		}
+
+		// get movie plot
+		validInput = getValidatedString("Plot (or \":q\" to quit): ", plot, true);
+		if (!validInput) {
+			return;
+		}
+
+		// get movie year
+		validInput = getValidatedUInt("Year (or \":q\" to quit): ", year, true);
+		if (!validInput) {
+			return;
+		}
+
+		// create movie and add to vector
+		Movie* m = new Movie(id, name, plot, year);
+
+		admin.addMovie(m);
+
+		// show success message and new movie details
+		std::cout << "\n[SUCCESS] Movie added successfully!\n" << std::endl;
+		m->print();
+		std::cout << "\n\n";
+	} while (true);
+}
+
+void addActor(Administrator& admin) {
+	// Generate id or ask user for id?
+	int birthYear;
+	int id;
+	std::string name;
+	bool validInput;
+
+
+	std::cout << "--------ADDING ACTOR---------\n";
+	do {
+		// get actor id
+		validInput = getValidatedUInt("ID (or \":q\" to quit): ", id);
+		if (!validInput) {
+			return;
+		}
+
+		// get actor name
+		validInput = getValidatedString("Name (or \":q\" to quit): ", name, true);
+		if (!validInput) {
+			return;
+		}
+
+		// get actor birth year
+		validInput = getValidatedUInt("Birth Year (or \":q\" to quit): ", birthYear, true);
+		if (!validInput) {
+			return;
+		}
+
+		// create actor and add to vector
+		Actor* a = new Actor(id, name, birthYear);
+		admin.addActor(a);
+
+		// show success message and new actor details
+		std::cout << "\n[SUCCESS] Actor added successfully!\n" << std::endl;
+		a->print();
+		std::cout << "\n\n";
+	} while (true);
 }
