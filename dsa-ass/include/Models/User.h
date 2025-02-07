@@ -20,5 +20,5 @@ public:
 
 	void displayActorsByMovie(HashMap<Vector<Movie*>>& movies);
 
-	void displayActorsKnown(string actorName);
+	void displayActorsKnown(HashMap<Vector<Actor*>>& actors);
 };

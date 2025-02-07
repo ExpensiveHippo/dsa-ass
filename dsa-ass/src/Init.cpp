@@ -116,12 +116,15 @@ void initCast(HashMap<Actor*>& actorMap, HashMap<Movie*>& movieMap) {
 		ss >> actorId >> commaSeparator >> movieId;
 
 		// check if actor and movie exist in the maps
-		Actor* actor = actorMap.get(std::to_string(actorId));
-		Movie* movie = movieMap.get(std::to_string(movieId));
 
-		if (actor && movie) {
+		if (actorMap.hasKey(std::to_string(actorId)) && movieMap.hasKey(std::to_string(movieId))) {
+			Actor* actor = actorMap.get(std::to_string(actorId));
+			Movie* movie = movieMap.get(std::to_string(movieId));
 			movie->addActor(actor);  // add actor to movie if both are valid
 			actor->addMovie(movie);  // add movie to actor
+		}
+		else {
+			std::cout << "[WARNING] Actor or Movie not found. Skipping to next line...\n";
 		}
 	}
 }
