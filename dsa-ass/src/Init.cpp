@@ -54,7 +54,7 @@ Vector<Vector<std::string>> parseCSVFile(std::string filepath, bool removeHeader
 	return result;
 }
 
-Vector<Movie*> initMovies() {
+Vector<Movie*> initMovies(HashMap<Movie*>& movieMap ) {
 	Vector<Movie*> movies;
 
 	try {
@@ -72,6 +72,7 @@ Vector<Movie*> initMovies() {
 				fields.get(2),
 				std::stoi(fields.get(3))
 			);
+			movieMap.add(std::to_string(m->getId()), m);
 			movies.push(m);
 		}
 	} catch (std::exception& err) {
@@ -81,7 +82,7 @@ Vector<Movie*> initMovies() {
 	return movies;
 };
 
-Vector<Actor*> initActors() {
+Vector<Actor*> initActors(HashMap<Actor*>& actorMap) {
 	std::ifstream file(ACTORS_FILE);
 	std::string line;
 	Vector<Actor*> actors;
@@ -95,9 +96,32 @@ Vector<Actor*> initActors() {
 			replace(data.get(1), "\"", ""),
 			std::stoi(data.get(2))
 		);
+		actorMap.add(std::to_string(a->getId()), a);
 		actors.push(a);
 	}
 	file.close();
 
 	return actors;
 };
+void initCast(HashMap<Actor*>& actorMap, HashMap<Movie*>& movieMap) {
+	std::ifstream file(CAST_FILE);
+	std::string line;
+	
+	std::getline(file, line); // get rid of headers
+	int actorId, movieId;
+	while (std::getline(file, line)) {
+		std::stringstream ss;
+		ss << line;
+		char commaSeparator;
+		ss >> actorId >> commaSeparator >> movieId;
+
+		// check if actor and movie exist in the maps
+		Actor* actor = actorMap.get(std::to_string(actorId));
+		Movie* movie = movieMap.get(std::to_string(movieId));
+
+		if (actor && movie) {
+			movie->addActor(actor);  // add actor to movie if both are valid
+			actor->addMovie(movie);  // add movie to actor
+		}
+	}
+}

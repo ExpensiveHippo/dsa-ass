@@ -45,6 +45,9 @@
     <ClCompile Include="src\DataStructures\AVLTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\DataStructures\HashMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Init.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\DataStructures\AVLTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DataStructures\HashMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

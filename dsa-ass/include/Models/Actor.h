@@ -1,8 +1,10 @@
 #pragma once
+#include "../DataStructures/Vector.h"
+#include "Movie.h"
 #include <iostream>
 #include <cstdint>
 #include <string>
-
+class Movie;
 class Actor
 {
 private:
@@ -11,6 +13,7 @@ private:
 	int birthYear;
 	int totalRating;
 	int totalRatingCount;
+	Vector<Movie*> movies;
 public:
 	Actor();
 	Actor(int id, std::string name, int birthYear);
@@ -22,8 +25,9 @@ public:
 	void addRating(int rating);
 	float getRating();
 	int getTotalRatingCount();
+	Vector<Movie*> getMovies();
+	void addMovie(Movie* movie);
 	void print();
-	uint16_t getBirthYear() const;	//getter for comparing age in User.cpp
 	bool operator>(const Actor& other) const;	//for comparing age in AVLTree.cpp
 	bool operator<(const Actor& other) const;
 };

@@ -1,6 +1,7 @@
 #include "../include/Init.h"
 #include "../include/Utils/IOUtils.h"
 #include "../include/Models/Administrator.h"
+#include "../include/Models/User.h"
 #include "../include/DataStructures/HashMap.h"
 
 #include <Windows.h>
@@ -41,7 +42,7 @@ int main() {
 	HashMap<Vector<Movie*>> hMovies;
 	HashMap<Vector<Actor*>> hActors;
 	Administrator admin(hActors, hMovies);
-
+	User user;
 	for (int i = 0; i < movies.length(); i++) {
 		Movie* m = movies.get(i);
 		admin.addMovie(m);

@@ -5,7 +5,7 @@
 
 #include <string>
 #include <cstdint>
-
+class Actor;
 class Movie
 {
 private:
@@ -28,12 +28,12 @@ public:
 	std::string getPlot();
 	void setYear(int newYear);
 	int getYear();
+	Vector<Actor*> getActors();
 	void addActor(Actor* actor);
 	void addRating(int rating);
 	float getRating();
 	int getTotalRatingCount();
 	void print();
-	uint16_t getReleaseYear();
 	bool operator<(const Movie& other) const;
 	bool operator>(const Movie& other) const;
 

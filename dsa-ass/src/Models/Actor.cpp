@@ -58,6 +58,15 @@ int Actor::getTotalRatingCount() {
 	return totalRatingCount;
 }
 
+Vector<Movie*> Actor::getMovies() {
+	return movies;
+}
+void Actor::addMovie(Movie* movie) {
+	if (movies.contains(movie)) {
+		throw std::invalid_argument("Movie " + movie->getName() + " already consists of Actor " + name);
+	}
+	movies.push(movie);
+}
 void Actor::print() {
 	std::cout << "[ACTOR]"
 		<< "\nID: " << id
@@ -65,13 +74,11 @@ void Actor::print() {
 		<< "\nBirth Year: " << birthYear
 		<< std::endl;
 }
-uint16_t Actor::getBirthYear() const {
-	return birthYear;
-}
+
 bool Actor::operator>(const Actor& other) const {
-	return this->birthYear < other.birthYear;	//reversed such that actors displayed in ascending order
+	return this->birthYear <= other.birthYear;	//reversed such that actors displayed in ascending order
 }
 
 bool Actor::operator<(const Actor& other) const {
-	return this->birthYear > other.birthYear;
+	return this->birthYear >= other.birthYear;
 }
