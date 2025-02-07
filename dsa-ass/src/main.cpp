@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <limits>
+#include <iomanip>
 
 enum Role {
 	NONE,
@@ -18,6 +19,12 @@ void printLogin();
 void printUserMenu();
 void printAdminMenu();
 int getUserOption();
+Actor* chooseActor(Vector<Actor*>& actorNameVec);
+Movie* chooseMovie(Vector<Movie*>& movieNameVec);
+void addActorRating(HashMap<Vector<Actor*>>& hActors);
+void addMovieRating(HashMap<Vector<Movie*>>& hMovies);
+void displayActorRating(HashMap<Vector<Actor*>>& aVec);
+void displayMovieRating(HashMap<Vector<Movie*>>& mVec);
 void addActor(Administrator& admin);
 void addMovie(Administrator& admin);
 void addActorToMovie(Administrator& admin);
@@ -26,6 +33,8 @@ void updateMovie(Administrator& admin);
 
 int main() {
 	SetConsoleOutputCP(CP_UTF8); // properly display utf8 characters
+	std::cout << std::fixed << std::setprecision(1); // 1dp for ratings
+
 	Vector<Movie*> movies = initMovies();
 	Vector<Actor*> actors = initActors();
 
@@ -51,6 +60,28 @@ int main() {
 		switch (role) {
 		case USER:
 			printUserMenu();
+			option = getUserOption();
+			std::cout << "\n";
+			switch (option) {
+			case 0:
+				role = NONE;
+				break;
+			case 6:
+				addActorRating(hActors);
+				break;
+			case 7:
+				addMovieRating(hMovies);
+				break;
+			case 8:
+				displayActorRating(hActors);
+				break;
+			case 9:
+				displayMovieRating(hMovies);
+				break;
+			default:
+				break;
+			}
+			clearScreen();
 			break;
 		case ADMINISTRATOR:
 			printAdminMenu();
@@ -122,6 +153,10 @@ void printUserMenu() {
 	std::cout << "[3] Display movies an actor starred in (alphabetical)" << std::endl;
 	std::cout << "[4] Display actors in that starred in movie (alphabetical)" << std::endl;
 	std::cout << "[5] Display a list of actors a particular actor knows" << std::endl;
+	std::cout << "[6] Add rating to actor" << std::endl;
+	std::cout << "[7] Add rating to movie" << std::endl;
+	std::cout << "[8] Display rating of actor" << std::endl;
+	std::cout << "[9] Display rating of movie" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -147,6 +182,206 @@ int getUserOption() {
 	}
 	std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 	return option;
+}
+
+Actor* chooseActor(Vector<Actor*>& actorNameVec) {
+	if (actorNameVec.length() == 0) {
+		throw std::invalid_argument("Error choosing actor: Vector is empty");
+	}
+
+	if (actorNameVec.length() == 1) {
+		return actorNameVec.get(0);
+	}
+
+	int len = actorNameVec.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		actorNameVec.get(i)->print();
+	}
+
+	do {
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
+			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+		}
+		else {
+			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+			return actorNameVec.get(choice - 1);
+		}
+	} while (true);
+
+}
+
+Movie* chooseMovie(Vector<Movie*>& movieNameVec) {
+	if (movieNameVec.length() == 0) {
+		throw std::invalid_argument("Error choosing movie: Vector is empty");
+	}
+
+	if (movieNameVec.length() == 1) {
+		return movieNameVec.get(0);
+	}
+
+	int len = movieNameVec.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		movieNameVec.get(i)->print();
+	}
+
+	do {
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
+			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+		}
+		else {
+			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+			return movieNameVec.get(choice - 1);
+		}
+	} while (true);
+
+
+}
+
+void addActorRating(HashMap<Vector<Actor*>>& hActors) {
+	bool abort;
+	std::string actorName;
+	int rating;
+	
+	std::cout << "-------ADDING ACTOR RATING---------\n";
+
+	do {
+		abort = getValidatedString("Enter actor name (or \":q\" to quit): ", actorName);
+		if (abort) {
+			return;
+		}
+
+		if (!hActors.hasKey(actorName)) {
+			std::cout << "[ERROR] Actor \"" << actorName << "\" does not exist\n";
+			continue;
+		}
+
+		Vector<Actor*> aVec = hActors.get(actorName);
+		Actor* a = chooseActor(aVec);
+		
+		std::cout << actorName << "'s current rating: " << a->getRating() << " (" << a->getTotalRatingCount() << ")" << std::endl;
+
+		while (true) {
+			abort = getValidatedUInt("Enter rating (0-5 or \":q\" to quit): ", rating);
+			if (abort) {
+				return;
+			}
+			try {
+				a->addRating(rating);
+				break;
+			}
+			catch (const std::out_of_range& err) {
+				std::cout << err.what() << std::endl;
+			}
+		}
+
+	} while (true);
+}
+
+void addMovieRating(HashMap<Vector<Movie*>>& hMovies) {
+	bool abort;
+	std::string movieName;
+	int rating;
+	
+	std::cout << "-------ADDING MOVIE RATING---------\n";
+
+	do {
+		abort = getValidatedString("Enter movie name (or \":q\" to quit): ", movieName);
+		if (abort) {
+			return;
+		}
+
+		if (!hMovies.hasKey(movieName)) {
+			std::cout << "[ERROR] Movie\"" << movieName << "\" does not exist\n";
+			continue;
+		}
+
+		Vector<Movie*> mVec = hMovies.get(movieName);
+		Movie* m = chooseMovie(mVec);
+
+		std::cout << movieName << "'s current rating: " << m->getRating() << " (" << m->getTotalRatingCount() << ")" << std::endl;
+
+		while (true) {
+			abort = getValidatedUInt("Enter rating (0-5 or \":q\" to quit): ", rating);
+			if (abort) {
+				return;
+			}
+			try {
+				m->addRating(rating);
+				std::cout << "[SUCCESS] Current movie rating is " << m->getRating();
+				break;
+			}
+			catch (const std::out_of_range& err) {
+				std::cout << err.what() << std::endl;
+			}
+		}
+	} while (true);
+
+}
+
+void displayActorRating(HashMap<Vector<Actor*>>& hActors) {
+	bool abort;
+	std::string actorName;
+	int rating;
+
+	std::cout << "-------DISPLAYING ACTOR RATING---------\n";
+
+	do {
+		abort = getValidatedString("Enter actor name (or \":q\" to quit): ", actorName);
+		if (abort) {
+			return;
+		}
+
+		if (!hActors.hasKey(actorName)) {
+			std::cout << "[ERROR] Actor \"" << actorName << "\" does not exist\n";
+			continue;
+		}
+
+		Vector<Actor*> aVec = hActors.get(actorName);
+		Actor* a = chooseActor(aVec);
+
+		std::cout << actorName << "'s rating: " << a->getRating() << " (" << a->getTotalRatingCount() << ")" << std::endl;
+	} while (true);
+}
+
+void displayMovieRating(HashMap<Vector<Movie*>>& hMovies) {
+	bool abort;
+	std::string movieName;
+	
+	std::cout << "-------DISPLAYING MOVIE RATING---------\n";
+
+	do {
+		abort = getValidatedString("Enter movie name (or \":q\" to quit): ", movieName);
+		if (abort) {
+			return;
+		}
+
+		if (!hMovies.hasKey(movieName)) {
+			std::cout << "[ERROR] Movie\"" << movieName << "\" does not exist\n";
+			continue;
+		}
+
+		Vector<Movie*> mVec = hMovies.get(movieName);
+		Movie* m = chooseMovie(mVec);
+		
+		std::cout << movieName << "'s rating: " << m->getRating() << " (" << m->getTotalRatingCount() << ")" << std::endl;
+	} while (true);
+
 }
 
 void addMovie(Administrator& admin) {
@@ -261,6 +496,7 @@ void addActorToMovie(Administrator& admin) {
 		if (abort) {
 			return;
 		}
+
 		try {
 			admin.addActorToMovie(actorName, movieName);
 		}
@@ -279,7 +515,7 @@ void updateActor(Administrator& admin) {
 		if (abort) {
 			return;
 		}
-		
+
 		try {
 			admin.updateActor(actorName);
 		}
