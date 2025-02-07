@@ -27,11 +27,11 @@ int main() {
 		Actor* a = actors.get(i);
 		admin.addActor(a);
 	}
-	/*user.displayActorsByAge(actors);
-	user.displayRecentMovies(movies);*/
+	user.displayActorsByAge(actors);
+	user.displayRecentMovies(movies);
 	user.displayActorsByMovie(hMovies);
 	user.displayMoviesByActor(hActors);
-	/*admin.addActorToMovie("Tom Jansen", "My Grandfather and the Man in the Moon");*/
+	admin.addActorToMovie("Tom Jansen", "My Grandfather and the Man in the Moon");
 	
 }
 

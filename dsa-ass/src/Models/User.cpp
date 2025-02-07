@@ -106,7 +106,7 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 		}
 	}
 	cout << "[AVL3]Actors between age " << min << " and " << max << ": " << endl;
-	//filteredActors.displayInOrder();
+	filteredActors.displayInOrder();
 }
 void User::displayRecentMovies(Vector<Movie*>& movies) {
 	AVLTree<Movie> recentMovies;
