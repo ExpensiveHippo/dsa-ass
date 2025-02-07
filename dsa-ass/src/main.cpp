@@ -22,6 +22,11 @@ void printAdminMenu();
 int getUserOption();
 Actor* chooseActor(Vector<Actor*>& actorNameVec);
 Movie* chooseMovie(Vector<Movie*>& movieNameVec);
+void displayActorsByAge(User& user, Vector<Actor*>& actors);
+void displayRecentMovies(User& user, Vector<Movie*>& movies);
+void displayMoviesByActor(User& user, HashMap<Vector<Actor*>>& actors);
+void displayActorsByMovie(User& user, HashMap<Vector<Movie*>>& movies);
+void displayActorsKnown(User& user, HashMap<Vector<Actor*>>& actors);
 void addActorRating(HashMap<Vector<Actor*>>& hActors);
 void addMovieRating(HashMap<Vector<Movie*>>& hMovies);
 void displayActorRating(HashMap<Vector<Actor*>>& aVec);
@@ -35,10 +40,11 @@ void updateMovie(Administrator& admin);
 int main() {
 	SetConsoleOutputCP(CP_UTF8); // properly display utf8 characters
 	std::cout << std::fixed << std::setprecision(1); // 1dp for ratings
-
-	Vector<Movie*> movies = initMovies();
-	Vector<Actor*> actors = initActors();
-
+	HashMap<Movie*> movieMap;
+	HashMap<Actor*> actorMap;
+	Vector<Movie*> movies = initMovies(movieMap);
+	Vector<Actor*> actors = initActors(actorMap);
+	initCast(actorMap, movieMap);
 	HashMap<Vector<Movie*>> hMovies;
 	HashMap<Vector<Actor*>> hActors;
 	Administrator admin(hActors, hMovies);
@@ -67,6 +73,21 @@ int main() {
 			case 0:
 				role = NONE;
 				break;
+			case 1:
+				displayActorsByAge(user, actors);
+				break;
+			case 2:
+				displayRecentMovies(user, movies);
+				break;
+			case 3:
+				displayMoviesByActor(user, hActors);
+				break;
+			case 4:
+				displayActorsByMovie(user, hMovies);
+				break;
+			case 5: 
+				displayActorsKnown(user, hActors);
+				break;
 			case 6:
 				addActorRating(hActors);
 				break;
@@ -82,7 +103,6 @@ int main() {
 			default:
 				break;
 			}
-			clearScreen();
 			break;
 		case ADMINISTRATOR:
 			printAdminMenu();
@@ -253,7 +273,26 @@ Movie* chooseMovie(Vector<Movie*>& movieNameVec) {
 
 
 }
-
+void displayActorsByAge(User& user, Vector<Actor*>& actors) {
+	std::cout << "-------DISPLAYING ACTORS BY AGE---------\n";
+	user.displayActorsByAge(actors);
+}
+void displayRecentMovies(User& user, Vector<Movie*>& movies) {
+	std::cout << "-------DISPLAYING RECENT MOVIES---------\n";
+	user.displayRecentMovies(movies);
+}
+void displayMoviesByActor(User& user, HashMap<Vector<Actor*>>& actors) {
+	std::cout << "-------DISPLAYING MOVIES BY ACTOR---------\n";
+	user.displayMoviesByActor(actors);
+}
+void displayActorsByMovie(User& user, HashMap<Vector<Movie*>>& movies) {
+	std::cout << "-------DISPLAYING ACTORS BY MOVIE---------\n";
+	user.displayActorsByMovie(movies);
+}
+void displayActorsKnown(User& user, HashMap<Vector<Actor*>>& actors) {
+	std::cout << "-------DISPLAYING ACTORS KNOWN---------\n";
+	user.displayActorsKnown(actors);
+}
 void addActorRating(HashMap<Vector<Actor*>>& hActors) {
 	bool abort;
 	std::string actorName;

@@ -85,14 +85,13 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 	AVLTree<Actor> filteredActors;
 	int currentYear = getCurrentYear();
 	bool isValid;
-	int count = 0;
 	while (true) {
 		isValid = getValidatedUInt("Enter minimum age (\":q\" to quit): ", min);
-		if (!isValid) {
+		if (isValid) {
 			return;
 		}
 		isValid = getValidatedUInt("Enter maximum age {\":q\" to quit): ", max);
-		if (!isValid) {
+		if (isValid) {
 			return;
 		}
 
@@ -102,7 +101,6 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 		int age = currentYear - actors.get(i)->getBirthYear();	
 		if (age >= min && age <= max) {
 			filteredActors.push(actors.get(i));
-			count++;
 		}
 	}
 	cout << "[AVL3]Actors between age " << min << " and " << max << ": " << endl;
@@ -117,7 +115,6 @@ void User::displayRecentMovies(Vector<Movie*>& movies) {
 			recentMovies.push(movies.get(i));
 		}
 	}
-	cout << "[AVL3]Movies in the past 3 years" << endl;
 	recentMovies.displayInOrder();
 }
 void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
@@ -127,7 +124,7 @@ void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
 	bool isValid;
 	while (true) {
 		isValid = getValidatedString("Enter movie name (\":q\" to quit): ", movieName);
-		if (!isValid) {
+		if (isValid) {
 			return;
 		}
 		break;
@@ -152,7 +149,7 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 	bool isValid;
 	while (true) {
 		isValid = getValidatedString("Enter actor name (\":q\" to quit): ", actorName);
-		if (!isValid) {
+		if (isValid) {
 			return;
 		}
 		break;
@@ -162,7 +159,6 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		int movieLength = static_cast<int>(movies.length());
 		mergeSort<Movie>(movies, 0, movieLength - 1, (CompareFunction<Movie>)compareMoviesByName);
 	}
-	cout << "Movies by actor name: \"" << actorName << "\"" << endl;
 	for (int i = 0; i < movies.length(); i++) {
 		cout << i + 1 << ". " << movies.get(i)->getName() << endl;
 	}
@@ -173,7 +169,7 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 	bool isValid;
 	while (true) {
 		isValid = getValidatedString("Enter actor name (\":q\" to quit): ", actorName);
-		if (!isValid) {
+		if (isValid) {
 			return;
 		}
 		break;
@@ -189,37 +185,36 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 	Vector<Actor*> toVisit; 
 
 	toVisit.push(actor);	//starts with the actor chosen by user
-	visited.add(actor->getName(), true);	//mark as visited
+	visited.add(actor->getName(), true);	//mark chosen actor as visited
 
 	size_t level = 0;
 	//A two-level BFS
 	while (toVisit.length() > 0 && level < 2) { 
-		Vector<Actor*> nextLevelActors; // Store the next level of actors
+		Vector<Actor*> nextLevelActors; // to store the next level of actors
 
 		for (size_t i = 0; i < toVisit.length(); i++) {
-			// Get co-actors (direct connections)
 			Actor* currentActor = toVisit.get(i);	
 			for (size_t j = 0; j < currentActor->getMovies().length(); j++) {  // 
 				Movie* movie = currentActor->getMovies().get(j);
 				for (size_t k = 0; k < movie->getActors().length(); k++) {  // Assuming Movie has an actors vector
 					Actor* coActor = movie->getActors().get(k);
 					if (coActor != actor && !visited.hasKey(coActor->getName())) {
-						knownActors.push(coActor);	//add actors associated to a standalone vector for displaying purposes.
-						nextLevelActors.push(coActor);	//1st
+						knownActors.push(coActor);	//a standalone vector for displaying purposes.
+						nextLevelActors.push(coActor);	//stores immediate actors to visit other known actors in the next level
 						visited.add(coActor->getName(), true);
 					}
 				}
 			}
 		}
 
-		// Move to the next level
+		
 		toVisit = nextLevelActors;
 		level++;
 	}
 
 	// Display results
 	if (knownActors.length() <= 0) {
-		cout << actorName << " does not have any known actors within 2 levels." << endl;
+		cout << actorName << " does not have any known actors." << endl;
 	}
 	else {
 		cout << "Actors known by " << actorName << ":\n";
