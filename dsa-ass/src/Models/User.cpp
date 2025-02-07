@@ -132,6 +132,10 @@ void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
 		}
 		break;
 	}
+	if (!movies.hasKey(movieName)) {
+		cout << "Movie name: \"" << movieName << "\" not found" << endl;
+		return;
+	}
 	Vector<Actor*> actors = movies.get(movieName).get(0)->getActors();
 	if (actors.length() > 1) {
 		int actorLength = static_cast<int>(actors.length());
@@ -163,5 +167,65 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		cout << i + 1 << ". " << movies.get(i)->getName() << endl;
 	}
 }
+void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
+	//Onboarding process (getName of actor user inputs)
+	string actorName;
+	bool isValid;
+	while (true) {
+		isValid = getValidatedString("Enter actor name (\":q\" to quit): ", actorName);
+		if (!isValid) {
+			return;
+		}
+		break;
+	}
+	if (!actors.hasKey(actorName)) {
+		cout << "Actor name: \"" << actorName << "\" not found" << endl;
+		return;
+	}
+	Actor* actor = actors.get(actorName).get(0);
+	//initialization for BFS
+	Vector<Actor*> knownActors;
+	HashMap<bool> visited; 
+	Vector<Actor*> toVisit; 
 
+	toVisit.push(actor);	//starts with the actor chosen by user
+	visited.add(actor->getName(), true);	//mark as visited
 
+	size_t level = 0;
+	//A two-level BFS
+	while (toVisit.length() > 0 && level < 2) { 
+		Vector<Actor*> nextLevelActors; // Store the next level of actors
+
+		for (size_t i = 0; i < toVisit.length(); i++) {
+			// Get co-actors (direct connections)
+			Actor* currentActor = toVisit.get(i);	
+			for (size_t j = 0; j < currentActor->getMovies().length(); j++) {  // 
+				Movie* movie = currentActor->getMovies().get(j);
+				for (size_t k = 0; k < movie->getActors().length(); k++) {  // Assuming Movie has an actors vector
+					Actor* coActor = movie->getActors().get(k);
+					if (coActor != actor && !visited.hasKey(coActor->getName())) {
+						knownActors.push(coActor);	//add actors associated to a standalone vector for displaying purposes.
+						nextLevelActors.push(coActor);	//1st
+						visited.add(coActor->getName(), true);
+					}
+				}
+			}
+		}
+
+		// Move to the next level
+		toVisit = nextLevelActors;
+		level++;
+	}
+
+	// Display results
+	if (knownActors.length() <= 0) {
+		cout << actorName << " does not have any known actors within 2 levels." << endl;
+	}
+	else {
+		cout << "Actors known by " << actorName << ":\n";
+		for (size_t i = 0; i < knownActors.length(); i++) {
+			Actor* a = knownActors.get(i);
+			cout << "- " << a->getName() << endl;  // Assuming Actor has getName()
+		}
+	}
+}
