@@ -13,6 +13,8 @@ private:
 	std::string name;
 	std::string plot;
 	int year;
+	int totalRating;
+	int totalRatingCount;
 	Vector<Actor*> actors;
 
 public:
@@ -27,6 +29,9 @@ public:
 	void setYear(int newYear);
 	int getYear();
 	void addActor(Actor* actor);
+	void addRating(int rating);
+	float getRating();
+	int getTotalRatingCount();
 	void print();
 };
 

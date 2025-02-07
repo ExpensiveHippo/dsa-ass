@@ -9,6 +9,8 @@ private:
 	int id;
 	std::string name;
 	int birthYear;
+	int totalRating;
+	int totalRatingCount;
 public:
 	Actor();
 	Actor(int id, std::string name, int birthYear);
@@ -17,6 +19,9 @@ public:
 	std::string getName();
 	void setBirthYear(int birthYear);
 	int getBirthYear();
+	void addRating(int rating);
+	float getRating();
+	int getTotalRatingCount();
 	void print();
 };
 

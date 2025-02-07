@@ -9,6 +9,8 @@ Movie::Movie(int id, std::string name, std::string plot, int year)
 	name(name), 
 	plot(plot),
 	year(year),
+	totalRating(0),
+	totalRatingCount(0),
 	actors(Vector<Actor*>())
 { }
 
@@ -45,6 +47,26 @@ void Movie::addActor(Actor* actor) {
 		throw std::invalid_argument("[ERROR] Actor " + actor->getName() + " is already part of Movie " + name);
 	}
 	actors.push(actor);
+}
+
+void Movie::addRating(int rating) {
+	if (rating < 0 || rating > 5) {
+		throw std::out_of_range("[ERROR] Rating must be between 0 - 5 inclusive.");
+	}
+
+	totalRating += rating;
+	totalRatingCount++;
+}
+
+float Movie::getRating() {
+	if (totalRatingCount == 0) {
+		return 0;
+	}
+	return static_cast<float>(totalRating) / totalRatingCount;
+}
+
+int Movie::getTotalRatingCount() {
+	return totalRatingCount;
 }
 
 void Movie::print() {
