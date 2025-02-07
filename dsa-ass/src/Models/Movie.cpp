@@ -42,7 +42,7 @@ int Movie::getYear() {
 
 void Movie::addActor(Actor* actor) {
 	if (actors.contains(actor)) {
-		throw std::invalid_argument("Actor " + actor->getName() + " is already part of Movie " + name);
+		throw std::invalid_argument("[ERROR] Actor " + actor->getName() + " is already part of Movie " + name);
 	}
 	actors.push(actor);
 }

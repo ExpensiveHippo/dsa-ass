@@ -11,7 +11,7 @@ const std::string QUITCOMMAND = ":q";
 @param s - The string to store the validated input
 @param abort - Allow user to quit by entering command to quit (default ":q")
 
-@return void
+@return bool - True if the process was aborted
 */
 bool getValidatedString(std::string prompt, std::string& s, bool abort = true);
 
@@ -22,7 +22,7 @@ bool getValidatedString(std::string prompt, std::string& s, bool abort = true);
 @param i - The int to store the validated input
 @param abort - Allow user to quit by entering command to quit (default ":q")
 
-@return bool - False if process was aborted
+@return bool - True if process was aborted
 */
 bool getValidatedUInt(std::string prompt, int& i, bool abort = true);
 

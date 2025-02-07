@@ -6,6 +6,7 @@
 #include <string.h>
 #include <cstdint>
 #include <limits>
+#include <stdexcept>
 
 Administrator::Administrator(HashMap<Vector<Actor*>>& actors, HashMap<Vector<Movie*>>& movies) 
 	: actors(actors), 
@@ -32,12 +33,13 @@ Actor* Administrator::chooseActor(Vector<Actor*>& aVec) {
 	do {
 		std::cout << "\nEnter choice: ";
 		std::cin >> choice;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		if (std::cin.fail() || choice < 1 || choice > len) {
 			std::cout << "Invalid choice. ";
 			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else {
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			return aVec.get(choice - 1);
 		}
 	} while (true);
@@ -64,12 +66,13 @@ Movie* Administrator::chooseMovie(Vector<Movie*>& mVec) {
 	do {
 		std::cout << "\nEnter choice: ";
 		std::cin >> choice;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		if (std::cin.fail() || choice < 1 || choice > len) {
 			std::cout << "Invalid choice. ";
 			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else {
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			return mVec.get(choice - 1);
 		}
 	} while (true);
@@ -81,7 +84,7 @@ void Administrator::addActor(Actor* a) {
 		Vector<Actor*>& aVec = actors.get(a->getName());
 		for (int i = 0; i < aVec.length(); i++) {
 			if (aVec.get(i)->getId() == a->getId()) {
-				std::cout << "[ERROR] There is already an actor with id: " << a->getId();
+				throw std::runtime_error("[ERROR] There is already an actor with id: " + std::to_string(a->getId()));
 				return;
 			}
 		}
@@ -99,8 +102,7 @@ void Administrator::addMovie(Movie* m) {
 		Vector<Movie*>& mVec = movies.get(m->getName());
 		for (int i = 0; i < mVec.length(); i++) {
 			if (mVec.get(i)->getId() == m->getId()) {
-				std::cout << "[ERROR] There is already a movie with id: " << m->getId();
-				return;
+				throw std::runtime_error("[ERROR] There is already a movie with id: " + std::to_string(m->getId()));
 			}
 		}
 		mVec.push(m);
@@ -114,26 +116,25 @@ void Administrator::addMovie(Movie* m) {
 
 void Administrator::addActorToMovie(std::string actorName, std::string movieName) {
 	if (!actors.hasKey(actorName)) {
-		std::cout << "[ERROR]: Actor \"" << actorName << "\" not found";
-		return;
+		throw std::invalid_argument("[ERROR]: Actor \"" + actorName + "\" not found");
 	}
 
 	if (!movies.hasKey(movieName)) {
-		std::cout << "[ERROR]: Movie \"" << movieName << "\" not found";
-		return;
+		throw std::invalid_argument("[ERROR]: Movie \"" + movieName + "\" not found");
 	}
 
 	Vector<Actor*> aVec = actors.get(actorName);
 	Vector<Movie*> mVec = movies.get(movieName);
 	Actor* a = chooseActor(aVec);
 	Movie* m = chooseMovie(mVec);
-
-	m->addActor(a);
-	std::cout << "[RESULT]" << std::endl;
-	m->print();
-	auto temp = movies.get("Shri Rama Raksha");
-	for (int i = 0; i < temp.length(); i++) {
-		temp.get(i)->print();
+	
+	try {
+		m->addActor(a);
+		std::cout << "[RESULT]" << std::endl;
+		m->print();
+	}
+	catch (const std::invalid_argument& err) {
+		std::cout << "\n" << err.what() << std::endl;
 	}
 }
 
@@ -151,12 +152,12 @@ void Administrator::updateActor(std::string actorName) {
 	// doesn't make sense to change id
 
 	// name
-	std::cout << "[NAME]\nCurrent: " << a->getName() << std::endl;
+	std::cout << "\n[NAME]\nCurrent: " << a->getName() << std::endl;
 	std::cout << "New (empty if no changes): ";
 	std::getline(std::cin, newName);
 
 	// birth year
-	std::cout << "[BIRTH YEAR]\nCurrent: " << std::endl;
+	std::cout << "\n[BIRTH YEAR]\nCurrent: " << std::endl;
 	while (true) {
 		std::cout << "New (empty if no changes): ";
 		std::getline(std::cin, newBirthYear);
@@ -165,7 +166,7 @@ void Administrator::updateActor(std::string actorName) {
 		}
 	}
 
-	std::cout << "[RESULT]" << std::endl;
+	std::cout << "\n[RESULT]" << std::endl;
 	if (newBirthYear.empty() && newName.empty()) {
 		std::cout << "No changes made" << std::endl;
 		return;
@@ -194,22 +195,22 @@ void Administrator::updateMovie(std::string movieName) {
 	std::string newYear;
 	Vector<Movie*> mVec = movies.get(movieName);
 	Movie* m = chooseMovie(mVec);
-	std::cout << "[UPDATING MOVIE DETAILS]" << std::endl;
+	std::cout << "\n[UPDATING MOVIE DETAILS]" << std::endl;
 
 	// doesn't make sense to change id
 
 	// name
-	std::cout << "[NAME]\nCurrent: " << m->getName() << std::endl;
-	std::cout << "New Name(empty if no changes): ";
+	std::cout << "\n[NAME]\nCurrent: " << m->getName() << std::endl;
+	std::cout << "New Name (empty if no changes): ";
 	std::getline(std::cin, newName);
 
 	// plot
-	std::cout << "[PLOT]\nCurrent: " << m->getPlot() << std::endl;
+	std::cout << "\n[PLOT]\nCurrent: " << m->getPlot() << std::endl;
 	std::cout << "New Plot (empty if no changes): ";
 	std::getline(std::cin, newPlot);
 
 	// year
-	std::cout << "[YEAR]\nCurrent: " << std::endl;
+	std::cout << "\n[YEAR]\nCurrent: " << std::endl;
 	while (true) {
 		std::cout << "New Year (empty if no changes): ";
 		std::getline(std::cin, newYear);
@@ -220,7 +221,7 @@ void Administrator::updateMovie(std::string movieName) {
 
 
 	// print updated results
-	std::cout << "[RESULT]" << std::endl;
+	std::cout << "\n[RESULT]" << std::endl;
 	if (newName.empty()
 		&& newPlot.empty()
 		&& newYear.empty()) {
