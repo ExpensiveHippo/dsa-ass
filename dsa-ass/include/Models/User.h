@@ -3,8 +3,11 @@
 #include "Actor.h"
 #include "Movie.h"
 #include "../DataStructures/Vector.h"
+#include "../DataStructures/AVLTree.h"
+#include "../DataStructures/HashMap.h"
 #include <string>
 using namespace std;
+
 class User {
 public:
 	User();
@@ -13,9 +16,9 @@ public:
 
 	void displayRecentMovies(Vector<Movie*>& movies);
 
-	void displayMoviesByActor(string actorName);
+	void displayMoviesByActor(HashMap<Vector<Actor*>>& actors);
 
-	void displayActorsByMovie(string movieName);
+	void displayActorsByMovie(HashMap<Vector<Movie*>>& movies);
 
 	void displayActorsKnown(string actorName);
 };

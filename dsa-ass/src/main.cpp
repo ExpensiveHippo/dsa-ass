@@ -8,13 +8,16 @@
 
 int main() {
 	SetConsoleOutputCP(CP_UTF8); // properly display utf8 characters
-	Vector<Movie*> movies = initMovies();
-	Vector<Actor*> actors = initActors();
+	HashMap<Actor*> actorMap;	// map of actors <id, Actor*>
+	HashMap<Movie*> movieMap;	// map of movies <id, Movie*>
+	Vector<Movie*> movies = initMovies(movieMap);
+	Vector<Actor*> actors = initActors(actorMap);
+	initCast(actorMap, movieMap);	// add actors to movies
 
 	HashMap<Vector<Movie*>> hMovies;
 	HashMap<Vector<Actor*>> hActors;
 	Administrator admin(hActors, hMovies);
-
+	User user;
 	for (int i = 0; i < movies.length(); i++) {
 		Movie* m = movies.get(i);
 		admin.addMovie(m);
@@ -24,8 +27,11 @@ int main() {
 		Actor* a = actors.get(i);
 		admin.addActor(a);
 	}
-	
-	admin.addActorToMovie("Tom Jansen", "My Grandfather and the Man in the Moon");
+	/*user.displayActorsByAge(actors);
+	user.displayRecentMovies(movies);*/
+	user.displayActorsByMovie(hMovies);
+	user.displayMoviesByActor(hActors);
+	/*admin.addActorToMovie("Tom Jansen", "My Grandfather and the Man in the Moon");*/
 	
 }
 

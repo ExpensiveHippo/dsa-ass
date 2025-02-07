@@ -79,7 +79,7 @@ void Vector<T>::push(T item) {
 }
 
 template<class T>
-T Vector<T>::get(size_t pos) {
+T& Vector<T>::get(size_t pos) {
 	if (pos >= currentCapacity) 
 	{
 		throw std::out_of_range("Index out of bounds");

@@ -1,7 +1,5 @@
 #pragma once
 #include "../../include/DataStructures/AVLTree.h"
-#include "../../include/Models/Actor.h"
-#include "../../include/Models/Movie.h"
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -83,7 +81,8 @@ typename AVLTree<T>::AVLNode* AVLTree<T>::insert(AVLNode* node, T* data) {
     return node;
 }
 template <typename T>
-void AVLTree<T>::displayInOrder(AVLNode* root) {
+void AVLTree<T>::displayInOrder(AVLNode* root)
+{
     if (root != nullptr) {
         displayInOrder(root->left);
         root->data->print();
