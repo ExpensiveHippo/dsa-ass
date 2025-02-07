@@ -103,7 +103,6 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 			filteredActors.push(actors.get(i));
 		}
 	}
-	cout << "[AVL3]Actors between age " << min << " and " << max << ": " << endl;
 	filteredActors.displayInOrder();
 }
 void User::displayRecentMovies(Vector<Movie*>& movies) {
@@ -159,6 +158,7 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		int movieLength = static_cast<int>(movies.length());
 		mergeSort<Movie>(movies, 0, movieLength - 1, (CompareFunction<Movie>)compareMoviesByName);
 	}
+	cout << "Movies by actor name: \"" << actorName << "\"" << endl;
 	for (int i = 0; i < movies.length(); i++) {
 		cout << i + 1 << ". " << movies.get(i)->getName() << endl;
 	}
@@ -193,6 +193,7 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 		Vector<Actor*> nextLevelActors; // to store the next level of actors
 
 		for (size_t i = 0; i < toVisit.length(); i++) {
+			// Get co-actors (direct connections)
 			Actor* currentActor = toVisit.get(i);	
 			for (size_t j = 0; j < currentActor->getMovies().length(); j++) {  // 
 				Movie* movie = currentActor->getMovies().get(j);
