@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include "../../include/DataStructures/Vector.h"
+#include "../../include/Models/Actor.h"
+#include "../../include/Models/Movie.h"
+
 
 const std::string QUITCOMMAND = ":q";
 
@@ -26,4 +30,7 @@ bool getValidatedString(std::string prompt, std::string& s, bool abort = true);
 */
 bool getValidatedUInt(std::string prompt, int& i, bool abort = true);
 
+Actor* chooseActor(Vector<Actor*>& actors);
+
+Movie* chooseMovie(Vector<Movie*>& movies);
 

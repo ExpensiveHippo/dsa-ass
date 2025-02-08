@@ -7,20 +7,26 @@
 class Administrator
 {
 private:
-	HashMap<Vector<Actor*>>& actors;
-	HashMap<Vector<Movie*>>& movies;
+	HashMap<Vector<Actor*>>& actorNameMap;
+	HashMap<Vector<Movie*>>& movieNameMap;
+	HashMap<Actor*>& actorIdMap;
+	HashMap<Movie*>& movieIdMap;
 
-	Actor* chooseActor(Vector<Actor*>& actorName);
-	Movie* chooseMovie(Vector<Movie*>& movieName);
 public: 
 	// default constructor
-	Administrator(HashMap<Vector<Actor*>>& actors, HashMap<Vector<Movie*>>& movies);
+	Administrator(
+		HashMap<Vector<Actor*>>& actorNameMap,
+		HashMap<Vector<Movie*>>& movieNameMap,
+		HashMap<Actor*>& actorIdMap,
+		HashMap<Movie*>& movieIdMap);
 
 	// add new actor
-	void addActor(Actor* a);
+	void addActor(int id, std::string name, int birthYear);
+	void addActor(Actor* actor);
 
 	// add new movie
-	void addMovie(Movie* m);
+	void addMovie(int id, std::string name, std::string plot, int year);
+	void addMovie(Movie* movie);
 
 	// add an actor to a movie
 	void addActorToMovie(std::string actorName, std::string movieName);

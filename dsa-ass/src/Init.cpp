@@ -54,7 +54,7 @@ Vector<Vector<std::string>> parseCSVFile(std::string filepath, bool removeHeader
 	return result;
 }
 
-Vector<Movie*> initMovies(HashMap<Movie*>& movieMap ) {
+Vector<Movie*> initMovies() {
 	Vector<Movie*> movies;
 
 	try {
@@ -72,7 +72,7 @@ Vector<Movie*> initMovies(HashMap<Movie*>& movieMap ) {
 				fields.get(2),
 				std::stoi(fields.get(3))
 			);
-			movieMap.add(std::to_string(m->getId()), m);
+
 			movies.push(m);
 		}
 	} catch (std::exception& err) {
@@ -82,7 +82,7 @@ Vector<Movie*> initMovies(HashMap<Movie*>& movieMap ) {
 	return movies;
 };
 
-Vector<Actor*> initActors(HashMap<Actor*>& actorMap) {
+Vector<Actor*> initActors() {
 	std::ifstream file(ACTORS_FILE);
 	std::string line;
 	Vector<Actor*> actors;
@@ -96,13 +96,14 @@ Vector<Actor*> initActors(HashMap<Actor*>& actorMap) {
 			replace(data.get(1), "\"", ""),
 			std::stoi(data.get(2))
 		);
-		actorMap.add(std::to_string(a->getId()), a);
+
 		actors.push(a);
 	}
 	file.close();
 
 	return actors;
 };
+
 void initCast(HashMap<Actor*>& actorMap, HashMap<Movie*>& movieMap) {
 	std::ifstream file(CAST_FILE);
 	std::string line;
@@ -127,4 +128,5 @@ void initCast(HashMap<Actor*>& actorMap, HashMap<Movie*>& movieMap) {
 			std::cout << "[WARNING] Actor or Movie not found. Skipping to next line...\n";
 		}
 	}
+	file.close();
 }

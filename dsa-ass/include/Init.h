@@ -22,10 +22,10 @@ Vector<Vector<std::string>> parseCSVFile(std::string field, bool removeHeader = 
 
 
 // initialise movies from movies.csv
-Vector<Movie*> initMovies(HashMap<Movie*>& movieMap);
+Vector<Movie*> initMovies();
 
 // initialise actors from actors.csv
-Vector<Actor*> initActors(HashMap<Actor*>& actorMap);
+Vector<Actor*> initActors();
 
 // initialise cast from cast.csv
 void initCast(HashMap<Actor*>& actorMap, HashMap<Movie*>& movieMap);

@@ -38,3 +38,69 @@ bool getValidatedUInt(std::string prompt, int& i, bool abort) {
 	} while (true);
 }
 
+Actor* chooseActor(Vector<Actor*>& actors) {
+	if (actors.length() == 0) {
+		throw std::invalid_argument("Error choosing actor: Vector is empty");
+	}
+
+	if (actors.length() == 1) {
+		return actors.get(0);
+	}
+
+	int len = actors.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		actors.get(i)->print();
+	}
+
+	do {
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else {
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			return actors.get(choice - 1);
+		}
+	} while (true);
+}
+
+Movie* chooseMovie(Vector<Movie*>& movies) {
+	if (movies.length() == 0) {
+		throw std::invalid_argument("Error choosing movie: Vector is empty");
+	}
+
+	if (movies.length() == 1) {
+		return movies.get(0);
+	}
+
+	int len = movies.length();
+	int choice = -1;
+
+	std::cout << "[INFO] Duplicates found:" << std::endl;
+	for (int i = 0; i < len; i++) {
+		std::cout << "[" << i << "] ";
+		movies.get(i)->print();
+	}
+
+	do {
+		std::cout << "\nEnter choice: ";
+		std::cin >> choice;
+		if (std::cin.fail() || choice < 1 || choice > len) {
+			std::cout << "Invalid choice. ";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else {
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			return movies.get(choice - 1);
+		}
+	} while (true);
+}
+

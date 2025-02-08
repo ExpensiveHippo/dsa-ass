@@ -45,6 +45,7 @@ int Movie::getYear() {
 Vector<Actor*> Movie::getActors() {
 	return actors;
 }
+
 void Movie::addActor(Actor* actor) {
 	if (actors.contains(actor)) {
 		throw std::invalid_argument("[ERROR] Actor " + actor->getName() + " is already part of Movie " + name);
@@ -88,9 +89,11 @@ void Movie::print() {
 		<< "\nName: " << name
 		<< "\nPlot: " << plot
 		<< "\nYear: " << year
+		<< "\nRating: " << totalRating / totalRatingCount << " (" << totalRatingCount << ")"
 		<< "\nActors: " << strActors
 		<< std::endl;
 }
+
 bool Movie::operator<(const Movie& other) const {
 	return this->year <= other.year;
 }

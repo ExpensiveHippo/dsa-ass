@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\DataStructures\HashMap.cpp" />
     <ClCompile Include="src\DataStructures\AVLTree.cpp" />
+    <ClCompile Include="src\Menu\AdminMenu.cpp" />
+    <ClCompile Include="src\Menu\UserMenu.cpp" />
     <ClCompile Include="src\Models\User.cpp" />
     <ClCompile Include="src\Models\Actor.cpp" />
     <ClCompile Include="src\Models\Administrator.cpp" />
@@ -34,6 +36,8 @@
   <ItemGroup>
     <ClInclude Include="include\DataStructures\HashMap.h" />
     <ClInclude Include="include\DataStructures\AVLTree.h" />
+    <ClInclude Include="include\Menu\AdminMenu.h" />
+    <ClInclude Include="include\Menu\UserMenu.h" />
     <ClInclude Include="include\Models\Actor.h" />
     <ClInclude Include="include\Models\Administrator.h" />
     <ClInclude Include="include\Init.h" />

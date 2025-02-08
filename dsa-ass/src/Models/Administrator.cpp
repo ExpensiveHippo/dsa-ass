@@ -8,126 +8,139 @@
 #include <limits>
 #include <stdexcept>
 
-Administrator::Administrator(HashMap<Vector<Actor*>>& actors, HashMap<Vector<Movie*>>& movies) 
-	: actors(actors), 
-	movies(movies) {}
+Administrator::Administrator(
+	HashMap<Vector<Actor*>>& actorNameMap, 
+	HashMap<Vector<Movie*>>& movieNameMap, 
+	HashMap<Actor*>& actorIdMap, 
+	HashMap<Movie*>& movieIdMap
+)
+	: actorNameMap(actorNameMap), 
+	movieNameMap(movieNameMap),
+	movieIdMap(movieIdMap),
+	actorIdMap(actorIdMap) {}
 
-Actor* Administrator::chooseActor(Vector<Actor*>& aVec) {
-	if (aVec.length() == 0) {
-		throw std::invalid_argument("Error choosing actor: Vector is empty");
+void Administrator::addActor(int id, std::string name, int birthYear) {
+
+	Actor* a = new Actor(id, name, birthYear);
+
+	if (actorIdMap.hasKey(std::to_string(id))) {
+		throw std::runtime_error("[ERROR] There is already an actor with id: " + std::to_string(id));
 	}
 
-	if (aVec.length() == 1) {
-		return aVec.get(0);
-	}
+	actorIdMap.add(std::to_string(id), a);
+	
+	if (actorNameMap.hasKey(name)) {
 
-	int len = aVec.length();
-	int choice = -1;
-
-	std::cout << "[INFO] Duplicates found:" << std::endl;
-	for (int i = 0; i < len; i++) {
-		std::cout << "[" << i << "] ";
-		aVec.get(i)->print();
-	}
-
-	do {
-		std::cout << "\nEnter choice: ";
-		std::cin >> choice;
-		if (std::cin.fail() || choice < 1 || choice > len) {
-			std::cout << "Invalid choice. ";
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		}
-		else {
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			return aVec.get(choice - 1);
-		}
-	} while (true);
-}
-
-Movie* Administrator::chooseMovie(Vector<Movie*>& mVec) {
-	if (mVec.length() == 0) {
-		throw std::invalid_argument("Error choosing movie: Vector is empty");
-	}
-
-	if (mVec.length() == 1) {
-		return mVec.get(0);
-	}
-
-	int len = mVec.length();
-	int choice = -1;
-
-	std::cout << "[INFO] Duplicates found:" << std::endl;
-	for (int i = 0; i < len; i++) {
-		std::cout << "[" << i << "] ";
-		mVec.get(i)->print();
-	}
-
-	do {
-		std::cout << "\nEnter choice: ";
-		std::cin >> choice;
-		if (std::cin.fail() || choice < 1 || choice > len) {
-			std::cout << "Invalid choice. ";
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		}
-		else {
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			return mVec.get(choice - 1);
-		}
-	} while (true);
-
-}
-
-void Administrator::addActor(Actor* a) {
-	if (actors.hasKey(a->getName())) {
-		Vector<Actor*>& aVec = actors.get(a->getName());
-		for (int i = 0; i < aVec.length(); i++) {
-			if (aVec.get(i)->getId() == a->getId()) {
-				throw std::runtime_error("[ERROR] There is already an actor with id: " + std::to_string(a->getId()));
-				return;
-			}
-		}
+		// if key already exists, update vector
+		Vector<Actor*>& aVec = actorNameMap.get(name);
 		aVec.push(a);
 	}
 	else {
+
+		// if key doesn't exist, create new vector
 		Vector<Actor*> aVec;
 		aVec.push(a);
-		actors.add(a->getName(), aVec);
+		actorNameMap.add(name, aVec);
+	}
+
+	// show success message
+	std::cout << "\n[SUCCESS] Actor added successfully!\n\n[ADDED]\n" << std::endl;
+	a->print();
+}
+
+void Administrator::addActor(Actor* actor) {
+	int id = actor->getId();
+	std::string name = actor->getName();
+
+	if (actorIdMap.hasKey(std::to_string(id))) {
+		throw std::runtime_error("[ERROR] There is already an actor with id: " + std::to_string(id));
+	}
+
+	actorIdMap.add(std::to_string(id), actor);
+	
+	if (actorNameMap.hasKey(name)) {
+
+		// if key already exists, update vector
+		Vector<Actor*>& aVec = actorNameMap.get(name);
+		aVec.push(actor);
+	}
+	else {
+
+		// if key doesn't exist, create new vector
+		Vector<Actor*> aVec;
+		aVec.push(actor);
+		actorNameMap.add(name, aVec);
 	}
 }
 
-void Administrator::addMovie(Movie* m) {
-	if (movies.hasKey(m->getName())) {
-		Vector<Movie*>& mVec = movies.get(m->getName());
-		for (int i = 0; i < mVec.length(); i++) {
-			if (mVec.get(i)->getId() == m->getId()) {
-				throw std::runtime_error("[ERROR] There is already a movie with id: " + std::to_string(m->getId()));
-			}
-		}
+void Administrator::addMovie(int id, std::string name, std::string plot, int year) {
+
+	Movie* m = new Movie(id, name, plot, year);
+
+	if (movieIdMap.hasKey(std::to_string(id))) {
+		throw std::runtime_error("[ERROR] There is already a movie with id: " + std::to_string(id));
+	}
+	
+	movieIdMap.add(std::to_string(id), m);
+
+	if (movieNameMap.hasKey(name)) {
+
+		// if key already exists, update vector
+		Vector<Movie*>& mVec = movieNameMap.get(name);
 		mVec.push(m);
 	}
 	else {
+
+		// if key doesn't exist, create new vector
 		Vector<Movie*> mVec;
 		mVec.push(m);
-		movies.add(m->getName(), mVec);
+		movieNameMap.add(name, mVec);
+	}
+
+	// show success message 
+	std::cout << "\n[SUCCESS] Movie added successfully!\n\n[ADDED]\n" << std::endl;
+	m->print();
+}
+
+void Administrator::addMovie(Movie* movie) {
+	int id = movie->getId();
+	std::string name = movie->getName();
+
+	if (movieIdMap.hasKey(std::to_string(id))) {
+		throw std::runtime_error("[ERROR] There is already a movie with id: " + std::to_string(id));
+	}
+
+	movieIdMap.add(std::to_string(id), movie);
+	
+	if (movieNameMap.hasKey(name)) {
+
+		// if key already exists, update vector
+		Vector<Movie*>& mVec = movieNameMap.get(name);
+		mVec.push(movie);
+	}
+	else {
+
+		// if key doesn't exist, create new vector
+		Vector<Movie*> mVec;
+		mVec.push(movie);
+		movieNameMap.add(name, mVec);
 	}
 }
 
 void Administrator::addActorToMovie(std::string actorName, std::string movieName) {
-	if (!actors.hasKey(actorName)) {
+	if (!actorNameMap.hasKey(actorName)) {
 		throw std::invalid_argument("[ERROR]: Actor \"" + actorName + "\" not found");
 	}
 
-	if (!movies.hasKey(movieName)) {
+	if (!movieNameMap.hasKey(movieName)) {
 		throw std::invalid_argument("[ERROR]: Movie \"" + movieName + "\" not found");
 	}
 
-	Vector<Actor*> aVec = actors.get(actorName);
-	Vector<Movie*> mVec = movies.get(movieName);
+	Vector<Actor*> aVec = actorNameMap.get(actorName);
+	Vector<Movie*> mVec = movieNameMap.get(movieName);
 	Actor* a = chooseActor(aVec);
 	Movie* m = chooseMovie(mVec);
-	
+
 	try {
 		m->addActor(a);
 		std::cout << "[RESULT]" << std::endl;
@@ -139,17 +152,17 @@ void Administrator::addActorToMovie(std::string actorName, std::string movieName
 }
 
 void Administrator::updateActor(std::string actorName) {
-	if (!actors.hasKey(actorName)) {
+	if (!actorNameMap.hasKey(actorName)) {
 		throw std::invalid_argument("[ERROR]: Actor " + actorName + " not found");
 	}
 
 	std::string newName;
 	std::string newBirthYear;
-	Vector<Actor*> aVec = actors.get(actorName);
-	Actor* a = chooseActor(aVec);
-	std::cout << "[UPDATING ACTOR DETAILS]" << std::endl;
 
-	// doesn't make sense to change id
+	Vector<Actor*> aVec = actorNameMap.get(actorName);
+	Actor* a = chooseActor(aVec);
+
+	std::cout << "[UPDATING ACTOR DETAILS]" << std::endl;
 
 	// name
 	std::cout << "\n[NAME]\nCurrent: " << a->getName() << std::endl;
@@ -166,38 +179,41 @@ void Administrator::updateActor(std::string actorName) {
 		}
 	}
 
-	std::cout << "\n[RESULT]" << std::endl;
+	// show update changes 
+	std::cout << "\n[CHANGES]" << std::endl;
 	if (newBirthYear.empty() && newName.empty()) {
 		std::cout << "No changes made" << std::endl;
-		return;
+	}
+	else {
+		if (!newName.empty()) {
+			std::cout << "Name: " << a->getName() << " -> " << newName << std::endl;
+			a->setName(newName);
+		}
+
+		if (!newBirthYear.empty()) {
+			std::cout << "Birth Year: " << a->getBirthYear() << " -> " << newBirthYear << std::endl;
+			a->setBirthYear(std::stoi(newBirthYear));
+		}
 	}
 
-	if (!newName.empty()) {
-		std::cout << "Name: " << a->getName() << " -> " << newName << std::endl;
-		a->setName(newName);
-	}
-
-	if (!newBirthYear.empty()) {
-		std::cout << "Birth Year: " << a->getBirthYear() << " -> " << newBirthYear << std::endl;
-		a->setBirthYear(std::stoi(newBirthYear));
-	}
-
+	// show result 
+	std::cout << "\n[FINAL RESULT]\n";
 	a->print();
 }
 
 void Administrator::updateMovie(std::string movieName) {
-	if (!movies.hasKey(movieName)) {
+	if (!movieNameMap.hasKey(movieName)) {
 		throw std::invalid_argument("[ERROR]: Movie " + movieName + " not found");
 	}
 
 	std::string newName;
 	std::string newPlot;
 	std::string newYear;
-	Vector<Movie*> mVec = movies.get(movieName);
-	Movie* m = chooseMovie(mVec);
-	std::cout << "\n[UPDATING MOVIE DETAILS]" << std::endl;
 
-	// doesn't make sense to change id
+	Vector<Movie*> mVec = movieNameMap.get(movieName);
+	Movie* m = chooseMovie(mVec);
+
+	std::cout << "\n[UPDATING MOVIE DETAILS]" << std::endl;
 
 	// name
 	std::cout << "\n[NAME]\nCurrent: " << m->getName() << std::endl;
@@ -219,30 +235,32 @@ void Administrator::updateMovie(std::string movieName) {
 		}
 	}
 
-
-	// print updated results
-	std::cout << "\n[RESULT]" << std::endl;
+	// print update changes 
+	std::cout << "\n[CHANGES]" << std::endl;
 	if (newName.empty()
 		&& newPlot.empty()
 		&& newYear.empty()) {
 		std::cout << "No changes made" << std::endl;
-		return;
+	}
+	else {
+		if (!newName.empty()) {
+			std::cout << "Name: " << m->getName() << " -> " << newName << std::endl;
+			m->setName(newName);
+		}
+
+		if (!newPlot.empty()) {
+			std::cout << "Plot: " << m->getPlot() << " -> " << newPlot << std::endl;
+			m->setPlot(newPlot);
+		}
+
+		if (!newYear.empty()) {
+			std::cout << "Year: " << m->getYear() << " -> " << newYear << std::endl;
+			m->setYear(std::stoi(newYear));
+		}
+
 	}
 
-	if (!newName.empty()) {
-		std::cout << "Name: " << m->getName() << " -> " << newName << std::endl;
-		m->setName(newName);
-	}
-
-	if (!newPlot.empty()) {
-		std::cout << "Plot: " << m->getPlot() << " -> " << newPlot << std::endl;
-		m->setPlot(newPlot);
-	}
-
-	if (!newYear.empty()) {
-		std::cout << "Year: " << m->getYear() << " -> " << newYear << std::endl;
-		m->setYear(std::stoi(newYear));
-	}
-
+	// show result
+	std::cout << "\n[FINAL RESULT]\n";
 	m->print();
 }
