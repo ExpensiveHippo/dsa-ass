@@ -1,3 +1,9 @@
+/*
+* NAME: RYAN HO
+* ID: S10261024
+* GROUP: glorp
+*/
+
 #pragma once
 
 #include <string>
@@ -30,7 +36,21 @@ bool getValidatedString(std::string prompt, std::string& s, bool abort = true);
 */
 bool getValidatedUInt(std::string prompt, int& i, bool abort = true);
 
+/*
+@brief Get an actor from a list of actors
+
+@param actors - The list of actors to choose from
+
+@return Actor* - The chosen actor
+*/
 Actor* chooseActor(Vector<Actor*>& actors);
 
+/*
+@brief Get a movie from a list of movies
+
+@param movies - The list of movies to choose from
+
+@return Movie* - The chosen movie
+*/
 Movie* chooseMovie(Vector<Movie*>& movies);
 

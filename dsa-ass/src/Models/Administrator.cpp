@@ -9,12 +9,17 @@
 #include <stdexcept>
 
 Administrator::Administrator(
+	Vector<Actor*>& actorVector,
+	Vector<Movie*>& movieVector,
 	HashMap<Vector<Actor*>>& actorNameMap, 
 	HashMap<Vector<Movie*>>& movieNameMap, 
 	HashMap<Actor*>& actorIdMap, 
 	HashMap<Movie*>& movieIdMap
 )
-	: actorNameMap(actorNameMap), 
+	: 
+	actorVector(actorVector),
+	movieVector(movieVector),
+	actorNameMap(actorNameMap), 
 	movieNameMap(movieNameMap),
 	movieIdMap(movieIdMap),
 	actorIdMap(actorIdMap) {}
@@ -28,6 +33,7 @@ void Administrator::addActor(int id, std::string name, int birthYear) {
 	}
 
 	actorIdMap.add(std::to_string(id), a);
+	actorVector.push(a);
 	
 	if (actorNameMap.hasKey(name)) {
 
@@ -82,6 +88,7 @@ void Administrator::addMovie(int id, std::string name, std::string plot, int yea
 	}
 	
 	movieIdMap.add(std::to_string(id), m);
+	movieVector.push(m);
 
 	if (movieNameMap.hasKey(name)) {
 
@@ -143,6 +150,7 @@ void Administrator::addActorToMovie(std::string actorName, std::string movieName
 
 	try {
 		m->addActor(a);
+		a->addMovie(m);
 		std::cout << "[RESULT]" << std::endl;
 		m->print();
 	}

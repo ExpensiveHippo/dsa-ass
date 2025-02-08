@@ -1,3 +1,9 @@
+/*
+* NAME: RYAN HO, ASHTON CHONG
+* ID: S10261024, (ADD)
+* GROUP: glorp
+*/
+
 #pragma once
 
 #include "DataStructures/Vector.h"

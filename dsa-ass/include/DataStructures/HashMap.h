@@ -1,3 +1,12 @@
+/*
+* NAME: RYAN HO
+* ID: S10261024
+* GROUP: 
+* FEATURES:
+* - unique_ptr for node and buckets which automatically manages the deletion of it when it goes out of bounds (e.g. assigned a new pointer) 
+* - hashmap automatically resizes when it hits a threshold, reducing the chances of collisions
+* - uses djb2 hash 
+*/
 #pragma once
 
 #include <string>

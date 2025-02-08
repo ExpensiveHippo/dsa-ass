@@ -1,3 +1,12 @@
+/*
+* NAME: RYAN HO
+* ID: S10261024
+* GROUP: 
+* FEATURES:
+* - unique_ptr for arr which automatically manages the deletion of it when it goes out of bounds (e.g. assigned a new pointer) 
+* - vector automatically resizes (by creating a new raw array) when it hits a threshold
+*/
+
 #pragma once
 
 #include <memory>
@@ -34,16 +43,38 @@ public:
 	// copy operator
 	Vector& operator=(const Vector& other) noexcept;
 
-	// appends an item to the back of the vector
+	/*
+	@brief appends an item to the back of the vector
+
+	@param item - the item to append
+
+	@returns void
+	*/
 	void push(T item);
 
-	// gets item at index specified
+	/*
+	@brief gets item at index specified
+
+	@param pos - the index of the item
+
+	@returns T& - reference to the item
+	*/
 	T& get(size_t pos);
 
-	// checks if an item exists
+	/*
+	@brief checks if an item is in the vector
+
+	@param item - the item to check for
+
+	@returns bool - true if the item is in the vector, else false
+	*/
 	bool contains(T item);
 
-	// returns the number of elements in the vector
+	/*
+	@brief Returns the current length of the vector
+
+	@returns size_t - the current length of the vector
+	*/
 	size_t length();
 };
 

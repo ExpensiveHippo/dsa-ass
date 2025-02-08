@@ -32,7 +32,7 @@ int main() {
 	HashMap<Vector<Actor*>> actorNameMap;
 	HashMap<Vector<Movie*>> movieNameMap;
 	User user;
-	Administrator admin(actorNameMap, movieNameMap, actorIdMap, movieIdMap);
+	Administrator admin(actors, movies, actorNameMap, movieNameMap, actorIdMap, movieIdMap);
 	UserMenu userMenu(user, actors, movies, actorNameMap, movieNameMap, actorIdMap, movieIdMap);
 	AdminMenu adminMenu(admin);
 

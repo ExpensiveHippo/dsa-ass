@@ -1,8 +1,15 @@
+/*
+* NAME: RYAN HO
+* ID: S10261024
+* GROUP: glorp
+*/
+
 #pragma once
 
 #include "../DataStructures/Vector.h"
 
 #include <string>
+
 /*
 @brief Splits a string based on the delimiter and returns the resulting vector
 
