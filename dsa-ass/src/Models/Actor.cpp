@@ -15,7 +15,8 @@ Actor::Actor(int id, std::string name, int birthYear)
 	name(name), 
 	birthYear(birthYear),
 	totalRating(0),
-	totalRatingCount(0)
+	totalRatingCount(0),
+	movies(Vector<Movie*>())
 {}
 
 int Actor::getId() {
@@ -40,11 +41,14 @@ int Actor::getBirthYear() {
 
 void Actor::addRating(int rating) {
 	if (rating < 0 || rating > 5) {
-		throw std::out_of_range("ERROR] Rating should be between 0 - 5 inclusive");
+		throw std::out_of_range("[ERROR] Rating should be between 0 - 5 inclusive");
 	}
 
 	totalRating += rating;
 	totalRatingCount++;
+	std::cout << "\n[RESULT]\n";
+	print();
+	std::cout << "\n\n";
 }
 
 float Actor::getRating() {
@@ -72,6 +76,7 @@ void Actor::print() {
 		<< "\nID: " << id
 		<< "\nName: " << name
 		<< "\nBirth Year: " << birthYear
+		<< "\nRating: " << getRating() << " (" << totalRatingCount << ")"
 		<< std::endl;
 }
 

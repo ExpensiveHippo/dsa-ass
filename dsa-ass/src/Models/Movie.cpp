@@ -89,7 +89,7 @@ void Movie::print() {
 		<< "\nName: " << name
 		<< "\nPlot: " << plot
 		<< "\nYear: " << year
-		<< "\nRating: " << totalRating / totalRatingCount << " (" << totalRatingCount << ")"
+		<< "\nRating: " << getRating() << " (" << totalRatingCount << ")"
 		<< "\nActors: " << strActors
 		<< std::endl;
 }

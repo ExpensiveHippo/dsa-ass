@@ -34,6 +34,7 @@ void AdminMenu::handleAdminChoice(int choice) {
 	default:
 		break;
 	}
+	clearScreen();
 }
 
 void AdminMenu::addMovie() {
@@ -73,7 +74,7 @@ void AdminMenu::addMovie() {
 			admin.addMovie(id, name, plot, year);
 		}
 		catch (const std::runtime_error& err) {
-			std::cerr << "\n" << err.what();
+			std::cerr << "\n" << err.what() << std::endl;
 		}
 
 	} while (true);
@@ -146,7 +147,7 @@ void AdminMenu::addActorToMovie() {
 			admin.addActorToMovie(actorName, movieName);
 		}
 		catch (const std::invalid_argument& err) {
-			std::cout << err.what() << std::endl;
+			std::cout << err.what() << "\n\n";
 		}
 	} while (true);
 }

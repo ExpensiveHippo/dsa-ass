@@ -20,7 +20,7 @@ UserMenu::UserMenu(
 
 
 void UserMenu::printUserMenu() {
-	std::cout << "--------------USER MENU--------------" << std::endl;
+	std::cout << "\n--------------USER MENU--------------" << std::endl;
 	std::cout << "[0] Sign out" << std::endl;
 	std::cout << "[1] Display actors' age (ascending)" << std::endl;
 	std::cout << "[2] Display movies from last 3 years (ascending)" << std::endl;
@@ -33,6 +33,7 @@ void UserMenu::printUserMenu() {
 	std::cout << "[9] Display rating of movie" << std::endl;
 	std::cout << std::endl;
 }
+
 
 void UserMenu::handleUserChoice(int choice)
 {
@@ -127,7 +128,7 @@ void UserMenu::addActorRating() {
 				break;
 			}
 			catch (const std::out_of_range& err) {
-				std::cout << err.what() << std::endl;
+				std::cout << "[ERROR] Rating must be between 0 - 5 inclusive." << "\n\n";
 			}
 		}
 
@@ -164,11 +165,11 @@ void UserMenu::addMovieRating() {
 			}
 			try {
 				m->addRating(rating);
-				std::cout << "[SUCCESS] Current movie rating is " << m->getRating();
+				std::cout << "[SUCCESS] Current movie rating is " << m->getRating() << " (" << m->getTotalRatingCount() << ")" << "\n\n";
 				break;
 			}
 			catch (const std::out_of_range& err) {
-				std::cout << err.what() << std::endl;
+				std::cout << "[ERROR] Rating must be between 0 - 5 inclusive." << "\n\n";
 			}
 		}
 	} while (true);
@@ -194,9 +195,14 @@ void UserMenu::displayActorRating() {
 		}
 
 		Vector<Actor*> aVec = actorNameMap.get(actorName);
-		Actor* a = chooseActor(aVec);
 
-		std::cout << actorName << "'s rating: " << a->getRating() << " (" << a->getTotalRatingCount() << ")" << std::endl;
+		std::cout << "\n";
+
+		for (int i = 0; i < aVec.length(); i++) {
+			aVec.get(i)->print();
+			std::cout << "\n";
+		}
+	
 	} while (true);
 }
 
@@ -213,14 +219,19 @@ void UserMenu::displayMovieRating() {
 		}
 
 		if (!movieNameMap.hasKey(movieName)) {
-			std::cout << "[ERROR] Movie\"" << movieName << "\" does not exist\n";
+			std::cout << "[ERROR] Movie \"" << movieName << "\" does not exist\n";
 			continue;
 		}
 
 		Vector<Movie*> mVec = movieNameMap.get(movieName);
-		Movie* m = chooseMovie(mVec);
 
-		std::cout << movieName << "'s rating: " << m->getRating() << " (" << m->getTotalRatingCount() << ")" << std::endl;
+		std::cout << "\n";
+
+		for (int i = 0; i < mVec.length(); i++) {
+			mVec.get(i)->print();
+			std::cout << "\n";
+		}
+
 	} while (true);
 
 }

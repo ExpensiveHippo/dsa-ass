@@ -118,6 +118,35 @@ V& HashMap<V>::get(K key) {
 }
 
 template<class V>
+V HashMap<V>::pop(K key) {
+	size_t index = hash(key);
+	auto& head = buckets[index];
+	Node* current = buckets[index].get();
+	Node* prev = nullptr;
+
+	while (current != nullptr) {
+		if (current->key == key) {
+
+			V value = std::move(current->value);
+
+			if (prev != nullptr) {
+				prev->next = std::move(current->next);
+			}
+			else {
+				head = std::move(current->next);
+			}
+			return value;
+		}
+		else {
+			prev = current;
+			current = current->next.get();
+		}
+	}
+
+	throw std::out_of_range("Key not found");
+}
+
+template<class V>
 void HashMap<V>::print() {
 	std::cout << "[HASHMAP]" << std::endl;
 	for (int i = 0; i < capacity; i++) {

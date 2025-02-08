@@ -54,10 +54,11 @@ public:
 	@brief Add an actor to the hashmaps if they do not exist
 
 	@param actor - pointer to the actor object
+	@param newActor - true if the actor is a new actor 
 
 	@returns void
 	*/
-	void addActor(Actor* actor);
+	void addActor(Actor* actor, bool newActor = true);
 
 	/*
 	@brief Add a movie to the hashmaps if it does not exist, as well as to the vector
@@ -75,10 +76,11 @@ public:
 	@brief Add a movie to the hashmaps if it does not exist
 
 	@param movie - pointer to the movie object
+	@param newMovie - true if the movie is a new movie 
 
 	@returns void
 	*/
-	void addMovie(Movie* movie);
+	void addMovie(Movie* movie, bool newMovie = true);
 
 	/*
 	@brief Add a actor to a movie, and the movie to the actor, if both exists. Else, throw invalid_argument exception

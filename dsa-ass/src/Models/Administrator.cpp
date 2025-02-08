@@ -52,17 +52,20 @@ void Administrator::addActor(int id, std::string name, int birthYear) {
 	// show success message
 	std::cout << "\n[SUCCESS] Actor added successfully!\n\n[ADDED]\n" << std::endl;
 	a->print();
+	std::cout << std::endl;
 }
 
-void Administrator::addActor(Actor* actor) {
-	int id = actor->getId();
+void Administrator::addActor(Actor* actor, bool newActor) {
+	std::string id = std::to_string(actor->getId());
 	std::string name = actor->getName();
 
-	if (actorIdMap.hasKey(std::to_string(id))) {
-		throw std::runtime_error("[ERROR] There is already an actor with id: " + std::to_string(id));
+	if (newActor && actorIdMap.hasKey(id)) {
+		throw std::runtime_error("[ERROR] There is already an actor with id: " + id);
 	}
 
-	actorIdMap.add(std::to_string(id), actor);
+	if (!actorIdMap.hasKey(id)) {
+		actorIdMap.add(id, actor);
+	}
 	
 	if (actorNameMap.hasKey(name)) {
 
@@ -109,15 +112,17 @@ void Administrator::addMovie(int id, std::string name, std::string plot, int yea
 	m->print();
 }
 
-void Administrator::addMovie(Movie* movie) {
-	int id = movie->getId();
+void Administrator::addMovie(Movie* movie, bool newMovie) {
+	std::string id = std::to_string(movie->getId());
 	std::string name = movie->getName();
 
-	if (movieIdMap.hasKey(std::to_string(id))) {
-		throw std::runtime_error("[ERROR] There is already a movie with id: " + std::to_string(id));
+	if (newMovie && movieIdMap.hasKey(id)) {
+		throw std::runtime_error("[ERROR] There is already a movie with id: " + id);
 	}
 
-	movieIdMap.add(std::to_string(id), movie);
+	if (!movieIdMap.hasKey(id)) {
+		movieIdMap.add(id, movie);
+	}
 	
 	if (movieNameMap.hasKey(name)) {
 
@@ -151,8 +156,9 @@ void Administrator::addActorToMovie(std::string actorName, std::string movieName
 	try {
 		m->addActor(a);
 		a->addMovie(m);
-		std::cout << "[RESULT]" << std::endl;
+		std::cout << "\n[RESULT]\n" << std::endl;
 		m->print();
+		std::cout << std::endl;
 	}
 	catch (const std::invalid_argument& err) {
 		std::cout << "\n" << err.what() << std::endl;
@@ -178,7 +184,7 @@ void Administrator::updateActor(std::string actorName) {
 	std::getline(std::cin, newName);
 
 	// birth year
-	std::cout << "\n[BIRTH YEAR]\nCurrent: " << std::endl;
+	std::cout << "\n[BIRTH YEAR]\nCurrent: " << a->getBirthYear() << std::endl;
 	while (true) {
 		std::cout << "New (empty if no changes): ";
 		std::getline(std::cin, newBirthYear);
@@ -195,7 +201,14 @@ void Administrator::updateActor(std::string actorName) {
 	else {
 		if (!newName.empty()) {
 			std::cout << "Name: " << a->getName() << " -> " << newName << std::endl;
+
+			Vector<Actor*> aVec = actorNameMap.pop(a->getName());
 			a->setName(newName);
+			
+			for (int i = 0; i < aVec.length(); i++) {
+				Actor* temp = aVec.get(i);
+				addActor(temp, false);
+			}
 		}
 
 		if (!newBirthYear.empty()) {
@@ -207,6 +220,7 @@ void Administrator::updateActor(std::string actorName) {
 	// show result 
 	std::cout << "\n[FINAL RESULT]\n";
 	a->print();
+	std::cout << "\n";
 }
 
 void Administrator::updateMovie(std::string movieName) {
@@ -234,7 +248,7 @@ void Administrator::updateMovie(std::string movieName) {
 	std::getline(std::cin, newPlot);
 
 	// year
-	std::cout << "\n[YEAR]\nCurrent: " << std::endl;
+	std::cout << "\n[YEAR]\nCurrent: " << m->getYear() << std::endl;
 	while (true) {
 		std::cout << "New Year (empty if no changes): ";
 		std::getline(std::cin, newYear);
@@ -253,7 +267,13 @@ void Administrator::updateMovie(std::string movieName) {
 	else {
 		if (!newName.empty()) {
 			std::cout << "Name: " << m->getName() << " -> " << newName << std::endl;
+			Vector<Movie*> mVec = movieNameMap.pop(m->getName());
 			m->setName(newName);
+
+			for (int i = 0; i < mVec.length(); i++) {
+				Movie* temp = mVec.get(i);
+				addMovie(temp, false);
+			}
 		}
 
 		if (!newPlot.empty()) {
@@ -271,4 +291,5 @@ void Administrator::updateMovie(std::string movieName) {
 	// show result
 	std::cout << "\n[FINAL RESULT]\n";
 	m->print();
+	std::cout << "\n";
 }

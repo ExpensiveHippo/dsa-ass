@@ -17,7 +17,6 @@ enum Role {
 	ADMINISTRATOR,
 };
 
-void clearScreen();
 void printLogin();
 int getUserOption();
 
@@ -98,9 +97,6 @@ int main() {
 	}
 }
 
-void clearScreen() {
-	std::cout << "\033[2J\033[1;1H";
-}
 
 void printLogin() {
 	std::cout << "--------------LOGIN--------------" << std::endl;

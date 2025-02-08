@@ -13,11 +13,17 @@ private:
 		AVLNode(T* value) : data(value), left(nullptr), right(nullptr), height(1) {}
 	};
 	AVLNode* root;
+
 	int height(AVLNode* node);
+
 	int isBalanced(AVLNode* node);
+
 	AVLNode* rotateRight(AVLNode* y);
+
 	AVLNode* rotateLeft(AVLNode* x);
+
 	AVLNode* insert(AVLNode* y, T* data);
+
 	void displayInOrder(AVLNode* root);
 public:
 	AVLTree();

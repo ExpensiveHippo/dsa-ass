@@ -86,6 +86,7 @@ void AVLTree<T>::displayInOrder(AVLNode* root)
     if (root != nullptr) {
         displayInOrder(root->left);
         root->data->print();
+		std::cout << "\n";
         displayInOrder(root->right);
     }
 }

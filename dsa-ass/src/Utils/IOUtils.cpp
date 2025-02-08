@@ -1,6 +1,7 @@
 #include "../../include/Utils/IOUtils.h"
 #include "../../include/Utils/StringUtils.h"
 
+#include <stdlib.h>
 #include <iostream>
 #include <limits>
 
@@ -50,17 +51,18 @@ Actor* chooseActor(Vector<Actor*>& actors) {
 	int len = actors.length();
 	int choice = -1;
 
-	std::cout << "[INFO] Duplicates found:" << std::endl;
+	std::cout << "\n[INFO] Duplicates found:\n\n";
 	for (int i = 0; i < len; i++) {
-		std::cout << "[" << i << "] ";
+		std::cout << "[" << i+1 << "] ";
 		actors.get(i)->print();
+		std::cout << "\n";
 	}
 
 	do {
 		std::cout << "\nEnter choice: ";
 		std::cin >> choice;
 		if (std::cin.fail() || choice < 1 || choice > len) {
-			std::cout << "Invalid choice. ";
+			std::cout << "[ERROR] Invalid choice.";
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
@@ -87,13 +89,14 @@ Movie* chooseMovie(Vector<Movie*>& movies) {
 	for (int i = 0; i < len; i++) {
 		std::cout << "[" << i << "] ";
 		movies.get(i)->print();
+		std::cout << std::endl;
 	}
 
 	do {
 		std::cout << "\nEnter choice: ";
 		std::cin >> choice;
 		if (std::cin.fail() || choice < 1 || choice > len) {
-			std::cout << "Invalid choice. ";
+			std::cout << "[ERROR] Invalid choice. ";
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
@@ -102,5 +105,9 @@ Movie* chooseMovie(Vector<Movie*>& movies) {
 			return movies.get(choice - 1);
 		}
 	} while (true);
+}
+
+void clearScreen() {
+	system("cls");
 }
 

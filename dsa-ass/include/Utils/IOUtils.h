@@ -54,3 +54,11 @@ Actor* chooseActor(Vector<Actor*>& actors);
 */
 Movie* chooseMovie(Vector<Movie*>& movies);
 
+/*
+@brief Clears the console screen
+
+@returns void
+*/
+void clearScreen();
+
+

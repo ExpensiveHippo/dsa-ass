@@ -132,7 +132,15 @@ void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
 		cout << "Movie name: \"" << movieName << "\" not found" << endl;
 		return;
 	}
-	Vector<Actor*> actors = movies.get(movieName).get(0)->getActors();
+
+	Vector<Movie*> mVec = movies.get(movieName);
+	Movie* movie = chooseMovie(mVec);
+	Vector<Actor*> actors = movie->getActors();
+	if (actors.length() == 0) {
+		std::cout << "NO MOVIES\n";
+		return;
+	}
+	
 	if (actors.length() > 1) {
 		int actorLength = static_cast<int>(actors.length());
 		mergeSort<Actor>(actors, 0, actorLength - 1, (CompareFunction<Actor>)compareActorsByName);
@@ -153,7 +161,21 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		}
 		break;
 	}
-	Vector<Movie*> movies = actors.get(actorName).get(0)->getMovies();
+
+	if (!actors.hasKey(actorName)) {
+		cout << "Actor name: \"" << actorName << "\" not found" << endl;
+		return;
+	}
+
+	Vector<Actor*> aVec = actors.get(actorName);
+	Actor* actor = chooseActor(aVec);
+	Vector<Movie*> movies = actor->getMovies();
+
+	if (movies.length() == 0) {
+		std::cout << "NO ACTORS\n";
+		return;
+	}
+
 	if (movies.length() > 1) {
 		int movieLength = static_cast<int>(movies.length());
 		mergeSort<Movie>(movies, 0, movieLength - 1, (CompareFunction<Movie>)compareMoviesByName);
@@ -178,14 +200,16 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 		cout << "Actor name: \"" << actorName << "\" not found" << endl;
 		return;
 	}
-	Actor* actor = actors.get(actorName).get(0);
+	Vector<Actor*> actorVec = actors.get(actorName);
+	Actor* actor = chooseActor(actorVec);
+
 	//initialization for BFS
 	Vector<Actor*> knownActors;
 	HashMap<bool> visited; 
 	Vector<Actor*> toVisit; 
 
 	toVisit.push(actor);	//starts with the actor chosen by user
-	visited.add(actor->getName(), true);	//mark chosen actor as visited
+	visited.add(std::to_string(actor->getId()), true);	//mark chosen actor as visited
 
 	size_t level = 0;
 	//A two-level BFS
@@ -199,10 +223,10 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 				Movie* movie = currentActor->getMovies().get(j);
 				for (size_t k = 0; k < movie->getActors().length(); k++) {  // Assuming Movie has an actors vector
 					Actor* coActor = movie->getActors().get(k);
-					if (coActor != actor && !visited.hasKey(coActor->getName())) {
+					if (coActor != actor && !visited.hasKey(std::to_string(coActor->getId()))) {
 						knownActors.push(coActor);	//a standalone vector for displaying purposes.
 						nextLevelActors.push(coActor);	//stores immediate actors to visit other known actors in the next level
-						visited.add(coActor->getName(), true);
+						visited.add(std::to_string(coActor->getId()), true);
 					}
 				}
 			}

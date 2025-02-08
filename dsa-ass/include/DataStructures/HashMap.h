@@ -1,7 +1,7 @@
 /*
 * NAME: RYAN HO
 * ID: S10261024
-* GROUP: 
+* GROUP: glorp
 * FEATURES:
 * - unique_ptr for node and buckets which automatically manages the deletion of it when it goes out of bounds (e.g. assigned a new pointer) 
 * - hashmap automatically resizes when it hits a threshold, reducing the chances of collisions
@@ -20,19 +20,58 @@ public:
 	// constructor
 	HashMap();
 
-	// check if key exists
+	/*
+	@brief Check if key exists in hashmap
+
+	@param key - key to check
+
+	@returns bool - true if key exists
+	*/
 	bool hasKey(K key);
 
-	// add new kvp
+	/*
+	@brief Add new kvp
+
+	@param key - key
+	@param value - value
+
+	@returns void
+	*/
 	void add(K key, V value);
 	
-	// update existing kvp
+	/*
+	@brief Update value given key
+
+	@param key - key
+	@param value - value
+
+	@returns void
+	*/
 	void update(K key, V value);
 
-	// get value given key
+	/*
+	@brief Retrieve value given key
+
+	@param key - key
+
+	@returns V& - value
+	*/
 	V& get(K key);
 
-	// print
+	/*
+	@brief Remove kvp given key
+
+	@param key - key
+
+	@returns V - value
+	*/
+	V pop(K key);
+
+	/*
+	@brief Print the hashmap
+
+	@returns void
+	*/
 	void print();
 
 private:
