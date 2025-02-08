@@ -1,6 +1,22 @@
+/*
+* NAME: ASHTON CHONG
+* ID: S10257765
+* GROUP: glorp
+* FEATURES:
+* - an AVLTree that allows for insertion of data like Actor and Movie objects into the tree
+* - auto balances the tree after every insertion via rotations
+* - allows custom comparisons with flexible comparison functions
+*/
+
+
+
 #pragma once
 #include <iostream>
-	
+
+template <typename T>
+using CompareFunction = bool(*)(T*, T*);
+
+
 template <typename T>
 class AVLTree 
 {
@@ -13,6 +29,7 @@ private:
 		AVLNode(T* value) : data(value), left(nullptr), right(nullptr), height(1) {}
 	};
 	AVLNode* root;
+	CompareFunction<T> compare;
 
 	int height(AVLNode* node);
 
@@ -26,7 +43,7 @@ private:
 
 	void displayInOrder(AVLNode* root);
 public:
-	AVLTree();
+	AVLTree(CompareFunction<T> compare);
 	void push(T* data);
 	void displayInOrder();
 };

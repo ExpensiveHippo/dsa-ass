@@ -31,6 +31,8 @@ void UserMenu::printUserMenu() {
 	std::cout << "[7] Add rating to movie" << std::endl;
 	std::cout << "[8] Display rating of actor" << std::endl;
 	std::cout << "[9] Display rating of movie" << std::endl;
+	std::cout << "[10] Display actors by a given rating" << std::endl;
+	std::cout << "[11] Display movies by a given rating" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -64,6 +66,12 @@ void UserMenu::handleUserChoice(int choice)
 		break;
 	case 9:
 		displayMovieRating();
+		break;
+	case 10:
+		displayActorsByRating();
+		break;
+	case 11:
+		displayMoviesByRating();
 		break;
 	default:
 		break;
@@ -236,3 +244,11 @@ void UserMenu::displayMovieRating() {
 
 }
 
+void UserMenu::displayActorsByRating() {
+	std::cout << "-------DISPLAYING ACTORS BY RATING---------\n";
+	user.displayActorsByRating(actorVector);
+}
+void UserMenu::displayMoviesByRating() {
+	std::cout << "-------DISPLAYING MOVIES BY RATING---------\n";
+	user.displayMoviesByRating(movieVector);
+}

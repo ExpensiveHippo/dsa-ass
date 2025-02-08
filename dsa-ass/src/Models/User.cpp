@@ -7,7 +7,7 @@
 
 User::User() {}
 template <typename T>
-using CompareFunction = bool(*)(const T*, const T*);	//function pointer to compare two different pointer objects (actors,movies)
+using CompareFunction = bool(*)(T*, T*);	//function pointer to compare two different pointer objects (actors,movies)
 /*INITIALIZATION of necessary functions*/
 int getCurrentYear() {
 	//time initialization
@@ -16,6 +16,7 @@ int getCurrentYear() {
 	localtime_s(&now, &rawTime);
 	return now.tm_year + 1900; //tm_year starts from 1900
 }
+
 //functions for CompareFunction<T>
 bool compareActorsByName(Actor* a1, Actor* a2) {
 	return a1->getName() < a2->getName();  
@@ -23,7 +24,18 @@ bool compareActorsByName(Actor* a1, Actor* a2) {
 bool compareMoviesByName(Movie* m1, Movie* m2) {
 	return m1->getName() < m2->getName();
 }
-
+bool compareActorsByYear(Actor* a1, Actor* a2) {
+	return a1->getBirthYear() >= a2->getBirthYear();
+}
+bool compareMoviesByYear(Movie* m1, Movie* m2) {
+	return m1->getYear() <= m2->getYear();
+}
+bool compareActorsByRating(Actor* a1, Actor* a2) {
+	return a1->getRating() >= a2->getRating();
+}
+bool compareMoviesByRating(Movie* m1, Movie* m2) {
+	return m1->getRating() >= m2->getRating();
+}
 
 //MERGE SORT ALGORITHM
 template<typename T>
@@ -82,7 +94,7 @@ void mergeSort(Vector<T*>& items, int left, int right, CompareFunction<T> compar
 void User::displayActorsByAge(Vector<Actor*>& actors) {
 	//initialization
 	int min, max;
-	AVLTree<Actor> filteredActors;
+	AVLTree<Actor> filteredActors(compareActorsByYear);
 	int currentYear = getCurrentYear();
 	bool isValid;
 	while (true) {
@@ -94,7 +106,10 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 		if (isValid) {
 			return;
 		}
-
+		if (min >= max) {
+			cout << "[ERROR] Please enter a valid age range (min < max)" << endl;
+			continue;
+		}
 		break;
 	}
 	for (int i = 0; i < actors.length(); i++) {
@@ -103,10 +118,11 @@ void User::displayActorsByAge(Vector<Actor*>& actors) {
 			filteredActors.push(actors.get(i));
 		}
 	}
+	cout << "\n\n";
 	filteredActors.displayInOrder();
 }
 void User::displayRecentMovies(Vector<Movie*>& movies) {
-	AVLTree<Movie> recentMovies;
+	AVLTree<Movie> recentMovies(compareMoviesByYear);
 	for (int i = 0; i < movies.length(); i++) {
 		int currentYear = getCurrentYear();
 		int releaseYear = movies.get(i)->getYear();
@@ -114,6 +130,7 @@ void User::displayRecentMovies(Vector<Movie*>& movies) {
 			recentMovies.push(movies.get(i));
 		}
 	}
+	cout << "\n\n";
 	recentMovies.displayInOrder();
 }
 void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
@@ -126,11 +143,11 @@ void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
 		if (isValid) {
 			return;
 		}
+		if (!movies.hasKey(movieName)) {
+			cout << "[ERROR] Movie name: \"" << movieName << "\" does not exist" << endl;
+			continue;
+		}
 		break;
-	}
-	if (!movies.hasKey(movieName)) {
-		cout << "Movie name: \"" << movieName << "\" not found" << endl;
-		return;
 	}
 
 	Vector<Movie*> mVec = movies.get(movieName);
@@ -145,9 +162,10 @@ void User::displayActorsByMovie(HashMap<Vector<Movie*>>& movies) {
 		int actorLength = static_cast<int>(actors.length());
 		mergeSort<Actor>(actors, 0, actorLength - 1, (CompareFunction<Actor>)compareActorsByName);
 	}
-	cout << "Actors in the movie name: \"" << movieName << "\"" << endl;
+	cout << "\n\n";
+	cout << "Actors in \"" << movieName << "\":" << endl;
 	for (int i = 0; i < actors.length(); i++) {
-		cout << i + 1 << ". " << actors.get(i)->getName() << endl;
+		actors.get(i)->print();
 	}
 }
 void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
@@ -159,12 +177,11 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		if (isValid) {
 			return;
 		}
+		if (!actors.hasKey(actorName)) {
+			cout << "[ERROR] Actor name: \"" << actorName << "\" not found" << endl;
+			continue;
+		}
 		break;
-	}
-
-	if (!actors.hasKey(actorName)) {
-		cout << "Actor name: \"" << actorName << "\" not found" << endl;
-		return;
 	}
 
 	Vector<Actor*> aVec = actors.get(actorName);
@@ -180,9 +197,10 @@ void User::displayMoviesByActor(HashMap<Vector<Actor*>>& actors) {
 		int movieLength = static_cast<int>(movies.length());
 		mergeSort<Movie>(movies, 0, movieLength - 1, (CompareFunction<Movie>)compareMoviesByName);
 	}
-	cout << "Movies by actor name: \"" << actorName << "\"" << endl;
+	cout << "\n\n";
+	cout << "Movies by \"" << actorName << "\":" << endl;
 	for (int i = 0; i < movies.length(); i++) {
-		cout << i + 1 << ". " << movies.get(i)->getName() << endl;
+		movies.get(i)->print();
 	}
 }
 void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
@@ -194,11 +212,11 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 		if (isValid) {
 			return;
 		}
+		if (!actors.hasKey(actorName)) {
+			cout << "Actor name: \"" << actorName << "\" not found" << endl;
+			continue;
+		}
 		break;
-	}
-	if (!actors.hasKey(actorName)) {
-		cout << "Actor name: \"" << actorName << "\" not found" << endl;
-		return;
 	}
 	Vector<Actor*> actorVec = actors.get(actorName);
 	Actor* actor = chooseActor(actorVec);
@@ -242,10 +260,75 @@ void User::displayActorsKnown(HashMap<Vector<Actor*>>& actors) {
 		cout << actorName << " does not have any known actors." << endl;
 	}
 	else {
-		cout << "Actors known by " << actorName << ":\n";
+		cout << "\n\n";
+		cout << "Actors known by " << actorName << ":" << endl;
 		for (size_t i = 0; i < knownActors.length(); i++) {
 			Actor* a = knownActors.get(i);
-			cout << "- " << a->getName() << endl;  // Assuming Actor has getName()
+			a->print();
 		}
 	}
+}
+void User::displayActorsByRating(Vector<Actor*>& actors) {
+	//initialization
+	int actorLength = static_cast<int>(actors.length());
+	AVLTree<Actor> filteredActors(compareActorsByRating);
+	int minRating;
+	bool isValid;
+	while (true) {
+		isValid = getValidatedUInt("Enter a minimum rating to filter actors (0-5 or \":q\" to quit): ", minRating);
+		if (isValid) {
+			return;
+		}
+		if (minRating < 0 || minRating > 5) {
+			cout << "[ERROR] Rating must be between 0 and 5 inclusive" << endl;
+			continue;
+		}
+		break;
+	}
+	bool hasActors = false;
+	for (int i = 0; i < actors.length(); i++) {
+		if (actors.get(i)->getRating() >= minRating) {
+			filteredActors.push(actors.get(i));
+			hasActors = true;
+		}
+	}
+	if (!hasActors) {
+		cout << "\nNo actors found with a rating greater than or equal to " << minRating << endl;
+		return;
+	}
+	cout << "\n\n";
+	filteredActors.displayInOrder();
+}
+void User::displayMoviesByRating(Vector<Movie*>& movies) {
+	//initialization
+	int movieLength = static_cast<int>(movies.length());
+	AVLTree<Movie> filteredMovies(compareMoviesByRating);	//pass a comparator function
+	int minRating;
+	bool isValid;
+	while (true) {
+		isValid = getValidatedUInt("Enter a minimum rating to filter movies (0-5 or \":q\" to quit): ", minRating);
+		if (isValid) {
+			return;
+		}
+		else if (minRating < 0 || minRating > 5) {
+			cout << "Rating must be between 0 and 5 inclusive" << endl;
+			continue;
+		}
+		break;
+	}
+	bool hasMovies = false;
+
+	for (int i = 0; i < movies.length(); i++) {
+		if (movies.get(i)->getRating() >= minRating) {
+			cout << "\n\n";
+			filteredMovies.push(movies.get(i));
+			hasMovies = true;
+		}
+	}
+	if (!hasMovies) {
+		cout << "No movies found with a rating greater than or equal to " << minRating << endl;
+		return;
+	}
+	cout << "\n\n";
+	filteredMovies.displayInOrder();
 }

@@ -5,7 +5,7 @@
 using namespace std;
 
 template <typename T>
-AVLTree<T>::AVLTree() : root(nullptr) {}
+AVLTree<T>::AVLTree(CompareFunction<T> compare) : root(nullptr), compare(compare) {}
 
 template <typename T>
 int AVLTree<T>::height(AVLNode* node) {
@@ -47,9 +47,9 @@ typename AVLTree<T>::AVLNode* AVLTree<T>::insert(AVLNode* node, T* data) {
     if (!node)
         return new AVLNode(data);   //root
 
-    if (*data < *(node->data))
+    if (compare(data, node->data))
         node->left = insert(node->left, data);
-    else if (*data > *(node->data))
+    else if (compare(node->data, data))
         node->right = insert(node->right, data);
     else
         return node;
@@ -59,21 +59,21 @@ typename AVLTree<T>::AVLNode* AVLTree<T>::insert(AVLNode* node, T* data) {
     int balance = isBalanced(node);
 
     // Single Rotation (Right Rotation)
-    if (balance > 1 && *data < *(node->left->data))
+    if (balance > 1 && compare(data, node->left->data))
         return rotateRight(node);
 
     // Single Rotation (Left Rotation)
-    if (balance < -1 && *data > *(node->right->data))
+    if (balance < -1 && compare(node->right->data, data))
         return rotateLeft(node);
 
     // Double Rotation(Left Right)
-    if (balance > 1 && *data > *(node->left->data)) {
+    if (balance > 1 && compare(node->left->data, data)) {
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
 
     // Double Rotation (Right Left)
-    if (balance < -1 && *data < *(node->right->data)) {
+    if (balance < -1 && compare(data, node->right->data)) {
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
@@ -98,3 +98,4 @@ template <typename T>
 void AVLTree<T>::displayInOrder() {
     displayInOrder(root);
 }
+

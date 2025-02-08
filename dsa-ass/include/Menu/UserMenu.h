@@ -113,6 +113,20 @@ public:
 	*/
 	void displayMovieRating();
 
+	/*
+	@brief Prompts for a rating and display actors with the same or higher rating
+
+	@returns void
+
+	*/
+	void displayActorsByRating();
+	/*
+	@brief Prompts for a rating and display movies with the same or higher rating
+
+	@returns void
+	*/
+	void displayMoviesByRating();
+
 private:
 	User& user;
 	Vector<Actor*>& actorVector;
