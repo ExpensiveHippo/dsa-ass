@@ -25,7 +25,7 @@ void UserMenu::printUserMenu() {
 	std::cout << "[1] Display actors' age (ascending)" << std::endl;
 	std::cout << "[2] Display movies from last 3 years (ascending)" << std::endl;
 	std::cout << "[3] Display movies an actor starred in (alphabetical)" << std::endl;
-	std::cout << "[4] Display actors in that starred in movie (alphabetical)" << std::endl;
+	std::cout << "[4] Display actors starred in a movie (alphabetical)" << std::endl;
 	std::cout << "[5] Display a list of actors a particular actor knows" << std::endl;
 	std::cout << "[6] Add rating to actor" << std::endl;
 	std::cout << "[7] Add rating to movie" << std::endl;
